@@ -1,4 +1,4 @@
-# Hayyak | حياك
+# Hayyak | حيّــاك
 
 ## Project Overview
 
