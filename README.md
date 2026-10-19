@@ -20,7 +20,3 @@ Hayyak is a web application designed to help users discover heritage sites in Sa
 - View ratings and reviews.
 - User registration and login.
 - Manage favorite heritage sites.
-
-## Website Link
-
-[]
