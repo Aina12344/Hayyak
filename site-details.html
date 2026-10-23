@@ -4,72 +4,97 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>تفاصيل الموقع | Hayyak</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
+<body class="over-hero">
   <div id="site-header"></div>
 
-  <main id="main" class="section wrap details-page">
-    <a class="details-back link-more" href="sites.html" data-i18n="details_back">← العودة إلى المواقع التراثية</a>
-    <p id="details-error" class="details-message details-error" role="status" hidden></p>
-    
-    <article id="site-details" hidden>
-      <section class="details-gallery">
-        <div class="details-photo-wrapper">
-          <button type="button" id="details-prev-btn" class="details-arrow-btn prev" aria-label="الصورة السابقة">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <img id="details-main-photo" class="details-main-photo" alt="">
-          <button type="button" id="details-next-btn" class="details-arrow-btn next" aria-label="الصورة التالية">
-            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
+  <main id="main" class="sd">
+    <p id="sd-error" class="sd-error wrap" role="status" hidden></p>
+
+    <article id="sd-article" hidden>
+      <!-- 1. Full-screen gallery -->
+      <section class="sd-hero" aria-roledescription="carousel" aria-label="Photos">
+        <div class="sd-slides" id="sd-slides"></div>
+        <div class="sd-shade" aria-hidden="true"></div>
+
+        <div class="sd-hero-in wrap">
+          <a class="sd-back" href="sites.html"><span class="sd-back-ico" data-icon="chevron"></span><span data-i18n="sd_back"></span></a>
+          <div class="sd-title-block">
+            <p class="sd-kicker" data-reveal="up"><span id="sd-type"></span><span class="sd-dot" aria-hidden="true"></span><span id="sd-city"></span></p>
+            <h1 id="sd-name" class="sd-name"></h1>
+          </div>
+
+          <div class="sd-controls" id="sd-controls">
+            <div class="sd-count" aria-live="polite"><span id="sd-current">01</span><span class="sd-count-line"></span><span id="sd-total">01</span></div>
+            <div class="sd-progress" aria-hidden="true"><span id="sd-progress-bar"></span></div>
+            <div class="sd-arrows">
+              <button type="button" class="sd-arrow prev" id="sd-prev" data-i18n-label="sd_prev"><span data-icon="chevron"></span></button>
+              <button type="button" class="sd-arrow next" id="sd-next" data-i18n-label="sd_next"><span data-icon="chevron"></span></button>
+            </div>
+          </div>
         </div>
-        <p id="details-photo-message" class="details-muted" hidden></p>
-        <div id="details-thumbnails" class="details-thumbnails"></div>
+
+        <div class="sd-thumbs wrap" id="sd-thumbs"></div>
+        <span class="sd-scroll" aria-hidden="true"><span></span></span>
       </section>
-      
-      <header class="details-heading">
-        <h1 id="details-name"></h1>
-        <div class="details-tags">
-          <span id="details-classification" class="badge"></span>
-          <span id="details-city" class="details-city-tag"></span>
+
+      <!-- 2. About + visit card -->
+      <section class="sd-body wrap">
+        <div class="sd-about">
+          <p class="sd-eyebrow" data-reveal="up" data-i18n="sd_about"></p>
+          <p id="sd-description" class="sd-lead" data-reveal="up"></p>
         </div>
-      </header>
 
-      <section class="details-card">
-        <h2 data-i18n="details_about">عن الموقع</h2>
-        <p id="details-description"></p>
+        <aside class="sd-visit" data-reveal="up" aria-labelledby="sd-visit-h">
+          <h2 id="sd-visit-h" data-i18n="sd_visit"></h2>
+          <dl class="sd-info">
+            <div><dt><span data-icon="pin"></span><span data-i18n="sd_location"></span></dt><dd id="sd-address"></dd></div>
+            <div><dt><span data-icon="clock"></span><span data-i18n="sd_hours"></span></dt><dd id="sd-hours"></dd></div>
+            <div><dt><span data-icon="tag"></span><span data-i18n="sd_category"></span></dt><dd id="sd-category"></dd></div>
+          </dl>
+          <a class="sd-map" id="sd-map" target="_blank" rel="noopener">
+            <span data-icon="map"></span><span data-i18n="sd_map"></span><span class="sd-map-ext" data-icon="external"></span>
+          </a>
+        </aside>
       </section>
 
-      <section class="details-card">
-        <h2 data-i18n="details_visit_info">معلومات الزيارة</h2>
-        <dl class="details-info">
-          <dt data-i18n="details_location">الموقع والعنوان</dt>
-          <dd id="details-address"></dd>
-          <dt data-i18n="details_hours">ساعات العمل</dt>
-          <dd id="details-hours"></dd>
-          <dt data-i18n="details_category">التصنيف</dt>
-          <dd id="details-category"></dd>
-        </dl>
+      <!-- 3. Reviews -->
+      <section class="sd-reviews wrap" aria-labelledby="sd-reviews-h">
+        <div class="sd-reviews-head" data-reveal="up">
+          <div>
+            <p class="sd-eyebrow" data-i18n="sd_reviews_eyebrow"></p>
+            <h2 id="sd-reviews-h" data-i18n="sd_reviews"></h2>
+          </div>
+          <div class="sd-score" id="sd-score" hidden>
+            <strong id="sd-avg"></strong>
+            <span class="sd-score-meta"><span class="sd-stars" id="sd-avg-stars"></span><span id="sd-review-count"></span></span>
+          </div>
+        </div>
+        <p class="sd-empty" id="sd-no-reviews" data-reveal="up" hidden>
+          <span class="sd-empty-ico" data-icon="star"></span><span data-i18n="sd_no_reviews"></span>
+        </p>
+        <ul class="sd-review-list" id="sd-review-list"></ul>
       </section>
 
-      <section class="details-card" id="details-reviews-section">
-        <h2 data-i18n="details_reviews_title">تقييمات الزوار</h2>
-        <p id="details-rating-summary" class="details-rating-summary" hidden></p>
-        <p id="details-no-reviews" class="details-muted" data-i18n="details_no_reviews">لا توجد تقييمات لهذا الموقع بعد.</p>
-        <ul id="details-review-list" class="details-review-list"></ul>
+      <!-- 4. More places nearby -->
+      <section class="sd-more wrap" id="sd-more" aria-labelledby="sd-more-h" hidden>
+        <div class="section-head" data-reveal="up">
+          <h2 id="sd-more-h"></h2>
+          <a class="link-more" href="sites.html"><span data-i18n="view_all"></span><span class="arrow" aria-hidden="true"></span></a>
+        </div>
+        <div class="sd-more-grid" id="sd-more-grid"></div>
       </section>
     </article>
   </main>
-  
+
   <div id="site-footer"></div>
-  
+
   <script src="js/sites.js"></script>
   <script src="js/layout.js"></script>
   <script src="js/site-details.js"></script>

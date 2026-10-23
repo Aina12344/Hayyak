@@ -36,7 +36,7 @@
       featured_eyebrow: "مختارات حيّاك", featured_title: "مواقع تستحق الزيارة", view_all: "عرض كل المواقع", view_cities: "عرض كل المدن",
       view_details: "عرض التفاصيل",
       types_eyebrow: "تصفّح حسب", types_title: "التصنيف",
-      cities_eyebrow: "تصفّح حسب", cities_title: "المدن",
+      cities_eyebrow: "وجهات", cities_title: "المدن",
       sites_word: "مواقع", site_word: "موقع",
       how_eyebrow: "كيف يساعدك حيّاك؟", how_title: "خطّط لزيارتك القادمة بسهولة",
       how1_t: "اكتشف", how1_d: "ابحث وصفِّ المواقع حسب المدينة والتصنيف.",
@@ -67,7 +67,7 @@
       featured_eyebrow: "Hayyak picks", featured_title: "Sites worth a visit", view_all: "View all sites", view_cities: "View all cities",
       view_details: "View details",
       types_eyebrow: "Browse by", types_title: "Classification",
-      cities_eyebrow: "Browse by", cities_title: "Cities",
+      cities_eyebrow: "Destinations", cities_title: "Cities",
       sites_word: "sites", site_word: "site",
       how_eyebrow: "How Hayyak helps", how_title: "Plan your next visit with ease",
       how1_t: "Discover", how1_d: "Search and filter sites by city and classification.",
@@ -144,6 +144,9 @@
     check: '<path d="m5 12 5 5 9-10"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
     lock: '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+    chevron: '<path d="m9 6 6 6-6 6"/>',
+    external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+    map: '<path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
     lang: '<path d="M4 6h9M8.5 4v2M6 6c.5 3 2.5 5.5 5 7M11 6c-.5 3-2.5 5.5-5 7M13 20l4-9 4 9M14.5 17h5"/>'
   };
   function icon(name) {
@@ -255,10 +258,33 @@
   }
 
 
+  /* ---------- 5. Motion: blocks with data-reveal fade up when they enter the screen ---------- */
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) document.documentElement.classList.add("motion");
+  let revealObserver = null;
+  function reveal(root) {
+    const els = (root || document).querySelectorAll("[data-reveal]:not(.is-in)");
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
+    if (!revealObserver) {
+      revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add("is-in"); revealObserver.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    }
+    els.forEach(function (el) { revealObserver.observe(el); });
+  }
+
   renderHeader();
   renderFooter();
   applyLang();
   applyIcons();
+  /* run after the page's own script has added its content */
+  window.addEventListener("load", function () { reveal(); });
+  document.addEventListener("DOMContentLoaded", function () { reveal(); });
 
   /* Lets a page add its own translations: Hayyak.addText({ ar: {...}, en: {...} }) */
   function addText(extra) {
@@ -271,5 +297,6 @@
   /* Public API for the other pages */
   window.Hayyak = { t: t, getLang: getLang, setLang: setLang, applyLang: applyLang,
                     getUser: getUser, login: login, logout: logout, esc: esc,
-                    icon: icon, applyIcons: applyIcons, addText: addText };
+                    icon: icon, applyIcons: applyIcons, addText: addText,
+                    reveal: reveal, reduceMotion: reduceMotion };
 })();

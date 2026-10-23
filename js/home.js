@@ -48,10 +48,10 @@
 
 
   function renderCities() {
-    document.getElementById("city-list").innerHTML = group("city").map(function (g) {
+    document.getElementById("city-list").innerHTML = group("city").map(function (g, i) {
       const cover = byId(CITY_COVER[g.en]) || g.sites[0];
       const name = esc(lang() === "ar" ? g.ar : g.en);
-      return '<a class="city-card" href="sites.html?city=' + encodeURIComponent(g.en) + '">' +
+      return '<a class="city-card" data-reveal="up" style="--d:' + i + '" href="sites.html?city=' + encodeURIComponent(g.en) + '">' +
         '<img src="' + photo(cover) + '" alt="' + name + '" loading="lazy">' +
         '<span class="city-info"><span class="city-name">' + name + "</span>" +
         '<span class="city-count">' + countLabel(g.n) + "</span></span></a>";
@@ -75,6 +75,7 @@
     renderCta();
     renderFeatured();
     renderCities();
+    Hayyak.reveal();
   }
 
   /* Search: sends the text to the Heritage Sites page */
