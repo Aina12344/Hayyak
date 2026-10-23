@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heritage Sites | Hayyak</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .sites-head {
+      margin-bottom: 1.5rem;
+    }
+
+    .sites-head h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--palm-dark);
+    }
+
+    .sites-head p {
+      margin: .25rem 0 0;
+      color: var(--muted);
+    }
+
+    .sites-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: end;
+    }
+
+    .filter-field {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .filter-field label {
+      font-weight: 700;
+      color: var(--palm-dark);
+    }
+
+    .filter-field input,
+    .filter-field select {
+      width: 100%;
+      min-height: 44px;
+      padding: .65rem .8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font: inherit;
+      background: white;
+      color: #333;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: end;
+    }
+
+    .clear-filters {
+      min-height: 44px;
+      padding: .65rem 1rem;
+      border: 1px solid var(--palm-dark);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--palm-dark);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .clear-filters:hover {
+      opacity: .8;
+    }
+
+    .sites-results {
+      margin: .5rem 0 1rem;
+      color: var(--muted);
+    }
+
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .sites-grid .site-card {
+      width: auto;
+      background: var(--palm-dark);
+    }
+
+    .sites-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--muted);
+      padding: 3rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="site-header"></div>
+
+  <main id="main" class="section wrap">
+    <div class="sites-head">
+      <h1 data-i18n="sites_title"></h1>
+      <p data-i18n="sites_subtitle"></p>
+    </div>
+
+    <!-- Search and filters -->
+    <section class="sites-filters" aria-label="Search and filter heritage sites">
+
+      <div class="filter-field">
+        <label for="site-search" data-i18n="search_label"></label>
+        <input
+          type="search"
+          id="site-search"
+          data-i18n-placeholder="search_placeholder"
+          placeholder="ابحث عن اسم الموقع أو المدينة أو التصنيف..."
+        >
+      </div>
+
+      <div class="filter-field">
+        <label for="city-filter" data-i18n="city_label"></label>
+        <select id="city-filter">
+          <option value="" data-i18n="all_cities"></option>
+        </select>
+      </div>
+
+      <div class="filter-field">
+        <label for="classification-filter" data-i18n="classification_label"></label>
+        <select id="classification-filter">
+          <option value="" data-i18n="all_classifications"></option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button
+          type="button"
+          id="clear-filters"
+          class="clear-filters"
+          data-i18n="clear_filters"
+        ></button>
+      </div>
+    </section>
+
+    <p id="sites-results" class="sites-results" aria-live="polite"></p>
+
+    <!-- Heritage site cards only -->
+    <section id="sites-grid" class="sites-grid" aria-live="polite"></section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/sites.js"></script>
+  <script src="js/layout.js"></script>
+
+  <script>
+    Hayyak.addText({
+      ar: {
+        sites_title: "المواقع التراثية",
+        sites_subtitle: "اكتشف المواقع التراثية والسياحية في المملكة العربية السعودية.",
+        search_label: "البحث",
+        search_placeholder: "ابحث بالاسم أو المدينة أو التصنيف...",
+        city_label: "المدينة",
+        all_cities: "جميع المدن",
+        classification_label: "التصنيف",
+        all_classifications: "جميع التصنيفات",
+        clear_filters: "مسح الفلاتر",
+        sites_empty: "لا توجد مواقع تطابق معايير البحث.",
+        photo_missing: "الصورة غير متوفرة",
+        results_count: "عدد النتائج:",
+        photo_alt: "صورة الموقع التراثي"
+      },
+      en: {
+        sites_title: "Heritage Sites",
+        sites_subtitle: "Explore the heritage and tourist sites of Saudi Arabia.",
+        search_label: "Search",
+        search_placeholder: "Search by name, city, or classification...",
+        city_label: "City",
+        all_cities: "All cities",
+        classification_label: "Classification",
+        all_classifications: "All classifications",
+        clear_filters: "Clear Filters",
+        sites_empty: "No sites match your search.",
+        photo_missing: "Photo not available",
+        results_count: "Results:",
+        photo_alt: "Heritage site photo"
+      }
+    });
+
+    const searchInput = document.getElementById("site-search");
+    const cityFilter = document.getElementById("city-filter");
+    const classificationFilter = document.getElementById("classification-filter");
+    const clearButton = document.getElementById("clear-filters");
+    const grid = document.getElementById("sites-grid");
+    const resultsCount = document.getElementById("sites-results");
+
+    function normalize(value) {
+      return String(value || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[أإآ]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/ى/g, "ي");
+    }
+
+    function getLocalizedValue(site, field) {
+      const language = Hayyak.getLang();
+
+      if (field === "city") {
+        return language === "ar" ? site.cityAr : site.cityEn;
+      }
+
+      if (field === "classification") {
+        return language === "ar"
+          ? site.classificationAr
+          : site.classificationEn;
+      }
+
+      return language === "ar" ? site.nameAr : site.nameEn;
+    }
+
+    function populateFilters() {
+      const language = Hayyak.getLang();
+      const selectedCity = cityFilter.value;
+      const selectedClassification = classificationFilter.value;
+
+      const cities = [...new Set(
+        heritageSites.map(site => site.cityAr).filter(Boolean)
+      )];
+
+      const classifications = [...new Set(
+        heritageSites.map(site => site.classificationAr).filter(Boolean)
+      )];
+
+      cityFilter.innerHTML =
+        '<option value="">' + Hayyak.t("all_cities") + '</option>';
+
+      cities.forEach(city => {
+        const site = heritageSites.find(item => item.cityAr === city);
+        const option = document.createElement("option");
+
+        option.value = site.cityEn;
+        option.textContent = language === "ar" ? city : site.cityEn;
+        cityFilter.appendChild(option);
+      });
+
+      classificationFilter.innerHTML =
+        '<option value="">' + Hayyak.t("all_classifications") + '</option>';
+
+      classifications.forEach(classification => {
+        const site = heritageSites.find(
+          item => item.classificationAr === classification
+        );
+
+        const option = document.createElement("option");
+        option.value = site.classificationEn;
+        option.textContent = language === "ar"
+          ? classification
+          : site.classificationEn;
+
+        classificationFilter.appendChild(option);
+      });
+
+      cityFilter.value = selectedCity;
+      classificationFilter.value = selectedClassification;
+    }
+
+    function getFilteredSites() {
+      const searchTerm = normalize(searchInput.value);
+      const selectedCity = cityFilter.value;
+      const selectedClassification = classificationFilter.value;
+
+      return heritageSites.filter(site => {
+        const searchableText = normalize([
+          site.nameAr,
+          site.nameEn,
+          site.cityAr,
+          site.cityEn,
+          site.classificationAr,
+          site.classificationEn
+        ].join(" "));
+
+        const matchesSearch =
+          !searchTerm || searchableText.includes(searchTerm);
+        
+        const matchesCity =
+        !selectedCity ||
+        normalize(site.cityEn) === normalize(selectedCity) ||
+        normalize(site.cityAr) === normalize(selectedCity);
+
+        const matchesClassification =
+        !selectedClassification ||
+        normalize(site.classificationEn) === normalize(selectedClassification) ||
+        normalize(site.classificationAr) === normalize(selectedClassification);
+        
+
+        return matchesSearch && matchesCity && matchesClassification;
+      });
+    }
+
+    function renderSites() {
+      const language = Hayyak.getLang();
+      const sites = getFilteredSites();
+
+      resultsCount.textContent =
+        Hayyak.t("results_count") + " " + sites.length;
+
+      if (!sites.length) {
+        grid.innerHTML = "";
+
+        const emptyMessage = document.createElement("p");
+        emptyMessage.className = "sites-empty";
+        emptyMessage.textContent = Hayyak.t("sites_empty");
+        grid.appendChild(emptyMessage);
+
+        return;
+      }
+
+      grid.innerHTML = sites.map(site => {
+        const name = Hayyak.esc(getLocalizedValue(site, "name"));
+        const city = Hayyak.esc(getLocalizedValue(site, "city"));
+        const type = Hayyak.esc(getLocalizedValue(site, "classification"));
+        const photo = site.photos && site.photos.length
+          ? site.photos[0]
+          : "";
+
+        const safePhoto = Hayyak.esc(photo);
+
+        return `
+          <a class="site-card"
+             href="site-details.html?id=${encodeURIComponent(site.siteID)}">
+            <img
+              src="${safePhoto}"
+              alt="${name}"
+              loading="lazy"
+              onerror="this.alt='${Hayyak.t("photo_missing")}'"
+            >
+            <span class="badge">${type}</span>
+            <span class="site-info">
+              <span class="site-name">${name}</span>
+              <span class="site-city">
+                ${Hayyak.icon("pin")}${city}
+              </span>
+            </span>
+          </a>
+        `;
+      }).join("");
+    }
+
+    function updateSites() {
+      renderSites();
+    }
+
+    searchInput.addEventListener("input", updateSites);
+    cityFilter.addEventListener("change", updateSites);
+    classificationFilter.addEventListener("change", updateSites);
+
+    clearButton.addEventListener("click", function () {
+      // Keep the search term; clear only the dropdown filters.
+      cityFilter.value = "";
+      classificationFilter.value = "";
+      renderSites();
+    });
+    
+    
+    // Read search and city values sent from the home page.
+const params = new URLSearchParams(window.location.search);
+const initialSearch = params.get("q") || "";
+const initialCity = params.get("city") || "";
+
+populateFilters();
+
+// Show the search term entered on the home page.
+searchInput.value = initialSearch;
+
+// Select the requested city, whether its name is Arabic or English.
+if (initialCity) {
+  const matchingCity = [...cityFilter.options].find(option =>
+    normalize(option.value) === normalize(initialCity) ||
+    normalize(option.textContent) === normalize(initialCity)
+  );
+
+  if (matchingCity) {
+    cityFilter.value = matchingCity.value;
+  }
+}
+
+renderSites();
+
+    
+
+    document.addEventListener("hayyak:lang", function () {
+      populateFilters();
+      renderSites();
+    });
+  </script>
+</body>
+</html>

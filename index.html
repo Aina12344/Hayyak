@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hayyak | حيّاك</title>
+  <meta name="description" content="Hayyak: a guide to heritage and tourist sites across Saudi Arabia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <!-- Hero: logo + search only -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"><img src="images/hero.jpg" alt=""></div>
+      <div class="hero-in wrap">
+        <h1 class="hero-logo"><img src="images/logo.png" alt="حيّاك | Hayyak"></h1>
+        <form class="search" id="search-form" role="search">
+          <span class="ico" data-icon="search"></span>
+          <label class="sr-only" for="q" data-i18n="search_label"></label>
+          <input id="q" name="q" type="search" data-i18n-placeholder="search_placeholder" autocomplete="off">
+          <button type="submit" class="btn btn-green" data-i18n="search_btn"></button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Featured sites -->
+    <section class="section wrap" aria-labelledby="featured-h">
+      <div class="section-head">
+        <h2 id="featured-h" data-i18n="featured_title"></h2>
+        <a class="link-more" href="sites.html"><span data-i18n="view_all"></span><span class="arrow" aria-hidden="true"></span></a>
+      </div>
+    </section>
+    <div class="marquee" id="featured"></div>
+
+    <!-- Cities -->
+    <section class="section wrap" aria-labelledby="cities-h">
+      <div class="section-head">
+        <h2 id="cities-h" data-i18n="cities_title"></h2>
+        <a class="link-more" href="sites.html"><span data-i18n="view_cities"></span><span class="arrow" aria-hidden="true"></span></a>
+      </div>
+      <div class="cities" id="city-list"></div>
+    </section>
+    <!-- Plan your next visit -->
+    <section class="section wrap" aria-labelledby="how-h">
+      <div class="cta">
+        <div class="cta-img" aria-hidden="true"><img src="images/15.jpg" alt=""></div>
+        <div class="cta-body">
+          <p class="eyebrow" data-i18n="how_eyebrow"></p>
+          <h2 id="how-h" data-i18n="how_title"></h2>
+          <ol class="steps">
+            <li><strong data-i18n="how1_t"></strong><span data-i18n="how1_d"></span></li>
+            <li><strong data-i18n="how2_t"></strong><span data-i18n="how2_d"></span></li>
+            <li><strong data-i18n="how3_t"></strong><span data-i18n="how3_d"></span></li>
+          </ol>
+          <a class="btn btn-primary btn-lg" id="cta-btn" href="register.html" data-i18n="cta_btn"></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/sites.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
