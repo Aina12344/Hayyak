@@ -3,22 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Site Details | Hayyak</title>
+  <title>تفاصيل الموقع | Hayyak</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <div id="site-header"></div>
+
   <main id="main" class="section wrap details-page">
-    <a class="details-back link-more" href="sites.html" data-i18n="details_back">العودة إلى المواقع التراثية</a>
+    <a class="details-back link-more" href="sites.html" data-i18n="details_back">← العودة إلى المواقع التراثية</a>
     <p id="details-error" class="details-message details-error" role="status" hidden></p>
     
     <article id="site-details" hidden>
       <section class="details-gallery">
-        <img id="details-main-photo" class="details-main-photo" alt="">
+        <div class="details-photo-wrapper">
+          <button type="button" id="details-prev-btn" class="details-arrow-btn prev" aria-label="الصورة السابقة">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <img id="details-main-photo" class="details-main-photo" alt="">
+          <button type="button" id="details-next-btn" class="details-arrow-btn next" aria-label="الصورة التالية">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
         <p id="details-photo-message" class="details-muted" hidden></p>
         <div id="details-thumbnails" class="details-thumbnails"></div>
       </section>
@@ -32,14 +43,14 @@
       </header>
 
       <section class="details-card">
-        <h2 data-i18n="details_about">نبذة عن الموقع</h2>
+        <h2 data-i18n="details_about">عن الموقع</h2>
         <p id="details-description"></p>
       </section>
 
       <section class="details-card">
         <h2 data-i18n="details_visit_info">معلومات الزيارة</h2>
         <dl class="details-info">
-          <dt data-i18n="details_location">الموقع / العنوان</dt>
+          <dt data-i18n="details_location">الموقع والعنوان</dt>
           <dd id="details-address"></dd>
           <dt data-i18n="details_hours">ساعات العمل</dt>
           <dd id="details-hours"></dd>
@@ -49,9 +60,9 @@
       </section>
 
       <section class="details-card" id="details-reviews-section">
-        <h2 data-i18n="details_reviews_title">التقييمات والمراجعات</h2>
+        <h2 data-i18n="details_reviews_title">تقييمات الزوار</h2>
         <p id="details-rating-summary" class="details-rating-summary" hidden></p>
-        <p id="details-no-reviews" class="details-muted" data-i18n="details_no_reviews">لا توجد مراجعات لهذا الموقع بعد.</p>
+        <p id="details-no-reviews" class="details-muted" data-i18n="details_no_reviews">لا توجد تقييمات لهذا الموقع بعد.</p>
         <ul id="details-review-list" class="details-review-list"></ul>
       </section>
     </article>
