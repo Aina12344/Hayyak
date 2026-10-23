@@ -14,7 +14,7 @@ const heritageSites = [
     "workingHours": "السبت إلى الأربعاء 9:00 ص – 7:00 م، الجمعة 2:00 م – 10:00 م / Sat–Wed 9:00 AM – 7:00 PM, Fri 2:00 PM – 10:00 PM",
     "photos": [
       "images/1.jpg",
-      "images/1.2.jpg"
+      "images/1.2.jpg",
       "images/1.3.jpg",
       "images/1.4.jpg",
       "images/1.5.jpg",
@@ -33,7 +33,7 @@ const heritageSites = [
     "address": "وسط مدينة الرياض / Central Riyadh",
     "workingHours": "السبت إلى الخميس 8:00 ص – 9:00 م، الجمعة 8:00 ص – 4:00 م / Sat–Thu 8:00 AM – 9:00 PM, Fri 8:00 AM – 4:00 PM",
     "photos": [
-      "images/2.jpg"
+      "images/2.jpg",
       "images/2.2.jpg",
       "images/2.3.jpg",
       "images/2.4.jpg",
@@ -52,7 +52,7 @@ const heritageSites = [
     "address": "حي الديرة، وسط الرياض، قرب قصر المربع التاريخي / Al-Dirah, central Riyadh, near Al Murabba Palace",
     "workingHours": "يوميًا 3:30 م – 10:30 م / Daily 3:30 PM – 10:30 PM",
     "photos": [
-      "images/3.jpg"
+      "images/3.jpg",
       "images/3.2.jpg",
       "images/3.3.jpg",
     ]
@@ -70,7 +70,7 @@ const heritageSites = [
     "address": "حي المربع، وسط الرياض، ضمن مركز الملك عبدالعزيز التاريخي / Al-Murabba, central Riyadh, within the King Abdulaziz Historical Center",
     "workingHours": "السبت إلى الخميس 9:00 ص – 8:00 م، الجمعة 5:00 م – 8:00 م / Sat–Thu 9:00 AM – 8:00 PM, Fri 5:00 PM – 8:00 PM",
     "photos": [
-      "images/4.jpg"
+      "images/4.jpg",
       "images/4.2.jpg",
       "images/4.3.jpg",
 
@@ -89,7 +89,7 @@ const heritageSites = [
     "address": "حي البلد، جدة / Al-Balad, Jeddah",
     "workingHours": "مفتوح يوميًا على مدار الساعة / Open daily, 24 hours",
     "photos": [
-      "images/5.jpg"
+      "images/5.jpg",
       "images/5.2.jpg",
       "images/5.3.jpg",
     ]
@@ -107,7 +107,7 @@ const heritageSites = [
     "address": "جدة التاريخية (البلد) / Historic Jeddah (Al-Balad)",
     "workingHours": "السبت إلى الأربعاء 9:00 ص – 10:30 م، الجمعة 4:30 م – 10:30 م / Sat–Wed 9:00 AM – 10:30 PM, Fri 4:30 PM – 10:30 PM",
     "photos": [
-      "images/6.jpg"
+      "images/6.jpg",
       "images/6.2.jpg",
       "images/6.3.jpg",
     ]
@@ -125,7 +125,7 @@ const heritageSites = [
     "address": "جدة التاريخية (البلد) / Historic Jeddah (Al-Balad)",
     "workingHours": "يوميًا 10:00 ص – 1:00 م و5:00 م – 9:00 م / Daily 10:00 AM – 1:00 PM and 5:00 PM – 9:00 PM",
     "photos": [
-      "images/7.jpg"
+      "images/7.jpg",
       "images/7.2.jpg",
       "images/7.3.jpg",
     ]
@@ -143,7 +143,7 @@ const heritageSites = [
     "address": "العُلا / AlUla",
     "workingHours": "مركز الزوار: يوميًا 7:30 ص – 6:00 م / Visitor center: daily 7:30 AM – 6:00 PM",
     "photos": [
-      "images/8.jpg"
+      "images/8.jpg",
       "images/8.2.jpg",
       "images/8.3.jpg",
     ]
@@ -161,7 +161,7 @@ const heritageSites = [
     "address": "العُلا / AlUla",
     "workingHours": "مفتوح يوميًا على مدار الساعة / Open daily, 24 hours",
     "photos": [
-      "images/9.jpg"
+      "images/9.jpg",
       "images/9.2.jpg",
       "images/9.3.jpg",
     ]
@@ -179,7 +179,7 @@ const heritageSites = [
     "address": "العُلا / AlUla",
     "workingHours": "يوميًا 9:00 ص – 11:00 م / Daily 9:00 AM – 11:00 PM",
     "photos": [
-      "images/10.jpg"
+      "images/10.jpg",
       "images/10.2.jpg",
       "images/10.3.jpg",
     ]
@@ -197,7 +197,7 @@ const heritageSites = [
     "address": "الدرعية التاريخية، شمال غرب الرياض / Historic Diriyah, northwest of Riyadh",
     "workingHours": "الأحد إلى الأربعاء 9:00 ص – 12:00 ص، الخميس إلى السبت 9:00 ص – 1:00 ص / Sun–Wed 9:00 AM – 12:00 AM, Thu–Sat 9:00 AM – 1:00 AM",
     "photos": [
-      "images/11.jpg"
+      "images/11.jpg",
       "images/11.2.jpg",
       "images/11.3.jpg",
     ]
@@ -215,7 +215,7 @@ const heritageSites = [
     "address": "حي الطريف، الدرعية / At-Turaif, Diriyah",
     "workingHours": "يوميًا 5:00 م – 12:00 ص / Daily 5:00 PM – 12:00 AM",
     "photos": [
-      "images/12.jpg"
+      "images/12.jpg",
       "images/12.2.jpg",
       "images/12.3.jpg",
     ]
@@ -233,7 +233,7 @@ const heritageSites = [
     "address": "الدرعية التاريخية، على هضبة مطلة على وادي حنيفة / Historic Diriyah, on a plateau overlooking Wadi Hanifa",
     "workingHours": "مفتوح يوميًا على مدار الساعة / Open daily, 24 hours",
     "photos": [
-      "images/13.jpg"
+      "images/13.jpg",
       "images/13.2.jpg",
       "images/13.3.jpg",
     ]
@@ -251,7 +251,7 @@ const heritageSites = [
     "address": "منطقة عسير / Asir region",
     "workingHours": "يوميًا 8:00 ص – 9:30 م / Daily 8:00 AM – 9:30 PM",
     "photos": [
-      "images/14.jpg"
+      "images/14.jpg",
       "images/14.2.jpg",
 
     ]
@@ -269,7 +269,7 @@ const heritageSites = [
     "address": "محافظة رجال ألمع، على بعد نحو 45 كم من أبها / Rijal Almaa, about 45 km from Abha",
     "workingHours": "مركز الزوار: السبت إلى الخميس 10:00 ص – 6:00 م، الجمعة 1:00 م – 6:00 م / Visitor center: Sat–Thu 10:00 AM – 6:00 PM, Fri 1:00 PM – 6:00 PM",
     "photos": [
-      "images/15.jpg"
+      "images/15.jpg",
       "images/15.2.jpg",
       "images/15.3.jpg",
       "images/15.4.jpg",
@@ -288,7 +288,7 @@ const heritageSites = [
     "address": "منطقة عسير / Asir region",
     "workingHours": "السبت إلى الخميس 7:00 ص – 7:30 م، الجمعة 1:30 م – 7:30 م / Sat–Thu 7:00 AM – 7:30 PM, Fri 1:30 PM – 7:30 PM",
     "photos": [
-      "images/16.jpg"
+      "images/16.jpg",
       "images/16.2.jpg",
       "images/16.3.jpg",
     ]
