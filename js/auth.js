@@ -16,7 +16,7 @@
       side_title: "اكتشف تراث المملكة", side_sub: "كل المواقع التراثية في مكان واحد.",
       f_name: "الاسم الكامل", f_email: "البريد الإلكتروني", f_pass: "كلمة المرور", f_pass2: "تأكيد كلمة المرور",
       ph_name: "مثال: سارة محمد", ph_email: "name@example.com", ph_pass: "••••••••",
-      rule_len: "8 أحرف على الأقل", rule_upper: "حرف إنجليزي كبير", rule_lower: "حرف إنجليزي صغير", rule_num: "رقم واحد على الأقل",
+      rule_len: "8 أحرف على الأقل", rule_upper: "حرف إنجليزي كبير", rule_lower: "حرف إنجليزي صغير", rule_num: "رقم واحد على الأقل", rule_special: "رمز خاص مثل \u2066! @ # $\u2069",
       btn_register: "إنشاء الحساب", btn_login: "دخول",
       have_acc: "عندك حساب؟", no_acc: "ما عندك حساب؟",
       show_pass: "إظهار كلمة المرور", hide_pass: "إخفاء كلمة المرور",
@@ -39,7 +39,7 @@
       side_title: "Discover the Kingdom's heritage", side_sub: "Every heritage site in one place.",
       f_name: "Full name", f_email: "Email", f_pass: "Password", f_pass2: "Confirm password",
       ph_name: "e.g. Sara Mohammed", ph_email: "name@example.com", ph_pass: "••••••••",
-      rule_len: "At least 8 characters", rule_upper: "One uppercase letter", rule_lower: "One lowercase letter", rule_num: "At least one number",
+      rule_len: "At least 8 characters", rule_upper: "One uppercase letter", rule_lower: "One lowercase letter", rule_num: "At least one number", rule_special: "A special character like ! @ # $",
       btn_register: "Create account", btn_login: "Log in",
       have_acc: "Already have an account?", no_acc: "Don't have an account?",
       show_pass: "Show password", hide_pass: "Hide password",
@@ -83,7 +83,8 @@
     len: function (p) { return p.length >= 8; },
     upper: function (p) { return /[A-Z]/.test(p); },
     lower: function (p) { return /[a-z]/.test(p); },
-    num: function (p) { return /[0-9]/.test(p); }
+    num: function (p) { return /[0-9]/.test(p); },
+    special: function (p) { return /[^A-Za-z0-9\s]/.test(p); }   // any symbol, e.g. ! @ # $ % & *
   };
 
   function checkName(v) {

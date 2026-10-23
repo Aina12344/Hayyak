@@ -1,4 +1,4 @@
-// Shared sample data for all pages (no database in this release)
+/* Shared sample data for all pages */
 const heritageSites = [
   {
     "siteID": 1,
@@ -17,7 +17,7 @@ const heritageSites = [
       "images/1.2.jpg",
       "images/1.3.jpg",
       "images/1.4.jpg",
-      "images/1.5.jpg",
+      "images/1.5.jpg"
     ]
   },
   {
@@ -36,7 +36,7 @@ const heritageSites = [
       "images/2.jpg",
       "images/2.2.jpg",
       "images/2.3.jpg",
-      "images/2.4.jpg",
+      "images/2.4.jpg"
     ]
   },
   {
@@ -54,7 +54,7 @@ const heritageSites = [
     "photos": [
       "images/3.jpg",
       "images/3.2.jpg",
-      "images/3.3.jpg",
+      "images/3.3.jpg"
     ]
   },
   {
@@ -72,8 +72,7 @@ const heritageSites = [
     "photos": [
       "images/4.jpg",
       "images/4.2.jpg",
-      "images/4.3.jpg",
-
+      "images/4.3.jpg"
     ]
   },
   {
@@ -91,7 +90,7 @@ const heritageSites = [
     "photos": [
       "images/5.jpg",
       "images/5.2.jpg",
-      "images/5.3.jpg",
+      "images/5.3.jpg"
     ]
   },
   {
@@ -109,7 +108,7 @@ const heritageSites = [
     "photos": [
       "images/6.jpg",
       "images/6.2.jpg",
-      "images/6.3.jpg",
+      "images/6.3.jpg"
     ]
   },
   {
@@ -127,7 +126,7 @@ const heritageSites = [
     "photos": [
       "images/7.jpg",
       "images/7.2.jpg",
-      "images/7.3.jpg",
+      "images/7.3.jpg"
     ]
   },
   {
@@ -145,7 +144,7 @@ const heritageSites = [
     "photos": [
       "images/8.jpg",
       "images/8.2.jpg",
-      "images/8.3.jpg",
+      "images/8.3.jpg"
     ]
   },
   {
@@ -163,7 +162,7 @@ const heritageSites = [
     "photos": [
       "images/9.jpg",
       "images/9.2.jpg",
-      "images/9.3.jpg",
+      "images/9.3.jpg"
     ]
   },
   {
@@ -181,7 +180,7 @@ const heritageSites = [
     "photos": [
       "images/10.jpg",
       "images/10.2.jpg",
-      "images/10.3.jpg",
+      "images/10.3.jpg"
     ]
   },
   {
@@ -199,7 +198,7 @@ const heritageSites = [
     "photos": [
       "images/11.jpg",
       "images/11.2.jpg",
-      "images/11.3.jpg",
+      "images/11.3.jpg"
     ]
   },
   {
@@ -217,7 +216,7 @@ const heritageSites = [
     "photos": [
       "images/12.jpg",
       "images/12.2.jpg",
-      "images/12.3.jpg",
+      "images/12.3.jpg"
     ]
   },
   {
@@ -235,7 +234,7 @@ const heritageSites = [
     "photos": [
       "images/13.jpg",
       "images/13.2.jpg",
-      "images/13.3.jpg",
+      "images/13.3.jpg"
     ]
   },
   {
@@ -252,8 +251,7 @@ const heritageSites = [
     "workingHours": "يوميًا 8:00 ص – 9:30 م / Daily 8:00 AM – 9:30 PM",
     "photos": [
       "images/14.jpg",
-      "images/14.2.jpg",
-
+      "images/14.2.jpg"
     ]
   },
   {
@@ -272,7 +270,7 @@ const heritageSites = [
       "images/15.jpg",
       "images/15.2.jpg",
       "images/15.3.jpg",
-      "images/15.4.jpg",
+      "images/15.4.jpg"
     ]
   },
   {
@@ -290,7 +288,7 @@ const heritageSites = [
     "photos": [
       "images/16.jpg",
       "images/16.2.jpg",
-      "images/16.3.jpg",
+      "images/16.3.jpg"
     ]
   }
 ];
