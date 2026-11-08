@@ -9,18 +9,18 @@ Developed for **IT320 – Practical Software Engineering**, King Saud University
 ## Features
 
 ### Tourist
-- Register, log in, and log out.
+- Register, log in, and log out using Firebase Authentication.
 - Browse all heritage sites.
 - Search for sites by name (Arabic or English) and filter them by city and classification.
 - View a site's details: photos, description, address, working hours, classification, and a Google Maps link.
-- Add, edit, and delete a rating and review, and see the average rating and number of reviews.
+- Add, edit, and delete a rating and review, and see the average rating and number of reviews. Reviews are shared between users through Firebase Cloud Firestore.
 - Add sites to **My Upcoming Visits**, view the list, and remove sites from it.
 
 ### Admin
 - Log in to the **Admin Dashboard**, which shows the number of sites, cities, and classifications.
 - **Add** a heritage site with its Arabic and English details and up to 5 photos.
 - **Edit** a site's details and photos.
-- **Delete** a site after a confirmation page (its reviews and photos are deleted with it).
+- **Delete** a site after a confirmation page.
 
 ### Both
 - Full Arabic and English interface with a language switch.
@@ -31,31 +31,31 @@ Developed for **IT320 – Practical Software Engineering**, King Saud University
 ## Technologies
 
 - HTML5, CSS3, and JavaScript (no frameworks).
-- Data is saved in the browser:
-  - accounts, sites, reviews, and upcoming visits in **localStorage**;
-  - photos added by the admin in **Cache Storage**, served by `sw.js` (a service worker) under paths such as `images/uploads/...`, so they appear in their original quality like the other site photos.
+- **Firebase Authentication** for tourist registration and login.
+- **Firebase Cloud Firestore** for storing and sharing ratings and reviews across different users and devices.
+- **localStorage** for some remaining browser-based features, including admin-managed site data.
+- **Cache Storage**, supported by `sw.js`, for photos added by the admin.
+- **GitHub Pages** for website hosting.
 
-> Hayyak does not use a database. Changes are saved in the browser where they are made, so they appear only on that computer and browser.
+> Hayyak uses Firebase for tourist authentication and shared reviews. Some other features still rely on browser-based storage.
 
 ---
 
 ## How to Run
 
-1. Download or clone this repository.
-2. Put the `Hayyak` folder inside your local server folder, for example:
-   - MAMP: `C:\MAMP\htdocs\Hayyak`
-   - XAMPP: `C:\xampp\htdocs\Hayyak`
-3. Start the local server, then open:
-   `http://localhost/Hayyak/index.html`
+1. Open the live website: https://aina12344.github.io/Hayyak/
+2. Browse heritage sites and view their details without logging in.
+3. Register or log in to add, edit, or delete your own reviews.
+4. Reviews are stored in Firebase and can be viewed by other visitors.
 
-Opening the website through the local server is recommended, so the admin's photos work without size limits.
+The website can also be run locally using a development server.
 
-### Test accounts
+### Test Accounts
 
-| Role    | Email             | Password     |
-|---------|-------------------|--------------|
-| Admin   | admin@hayyak.sa   | Admin@2026   |
-| Tourist | Create one from the **Register** page | — |
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@hayyak.sa | Admin@2026 |
+| Tourist | Create an account from the **Register** page | — |
 
 To return to the original 16 heritage sites, log in as the admin and click **Restore the original data** at the bottom of the Admin Dashboard.
 
@@ -63,25 +63,24 @@ To return to the original 16 heritage sites, log in as the admin and click **Res
 
 ## Project Structure
 
-```
+```text
 Hayyak/
 ├── index.html            Home page
-├── sites.html            Heritage sites list with search and filters
+├── sites.html            Heritage sites list
 ├── site-details.html     Site details, ratings and reviews
-├── upcoming.html         My Upcoming Visits
 ├── login.html            Log in
 ├── register.html         Register
 ├── admin.html            Admin Dashboard
 ├── admin-add.html        Add Site
 ├── admin-edit.html       Edit Site
 ├── admin-delete.html     Delete Site
-├── sw.js                 Serves the photos added by the admin
-├── css/                  style.css (whole website), admin.css (admin pages)
-├── js/                   sites.js (site data), layout.js (header, footer, language),
-│                         auth.js (register and log in), home.js, site-details.js,
-│                         admin.js (admin pages)
+├── sw.js                 Serves admin-uploaded photos
+├── css/                  Website and admin styling
+├── js/                   Website functionality, Firebase
+│                         authentication and reviews
 ├── images/               Site photos and logo
 ├── docs/                 Architecture diagram
+├── firestore.rules       Firestore security rules
 ├── README.md
 └── AUTHORS
 ```
