@@ -98,10 +98,12 @@
       const date=dt?dt.toLocaleDateString(Hayyak.getLang()==='ar'?'ar-SA':'en-GB',{year:'numeric',month:'long',day:'numeric'}):'';
       const isOwner=!!user&&r.userID===user.uid;
       const buttons=isOwner?'<div class="sd-review-actions"><button type="button" data-review-action="edit">'+L('edit')+'</button><button type="button" class="is-delete" data-review-action="delete">'+L('delete')+'</button></div>':'';
-      return '<li class="sd-review" data-reveal="up" style="--d:'+(i%3)+'"><span class="sd-avatar" aria-hidden="true">'+escapeHTML(who.trim().charAt(0))+'</span>'+ 
+      return '<li class="sd-review"><span class="sd-avatar" aria-hidden="true">'+escapeHTML(who.trim().charAt(0))+'</span>'+ 
         '<div class="sd-review-body"><div class="sd-review-head"><strong dir="auto">'+escapeHTML(who)+'</strong><span class="sd-stars" aria-label="'+Number(r.rating)+'/5">'+starString(Number(r.rating))+'</span></div>'+ 
         '<p dir="auto">'+escapeHTML(r.text||'')+'</p>'+(date?'<time class="sd-review-date">'+escapeHTML(date)+'</time>':'')+buttons+'</div></li>';
     }).join('');
+    // Firestore delivers these cards asynchronously, after the initial scroll
+    // animation observer has run. They must be immediately visible.
   }
   form.addEventListener('submit',async e=>{
     e.preventDefault();
