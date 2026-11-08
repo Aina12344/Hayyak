@@ -1,4 +1,4 @@
-/* Hayyak reviews: original star-picker interface + shared Firebase Firestore storage. */
+/* Hayyak reviews + shared Firebase Firestore storage. */
 (function () {
   "use strict";
   const $ = id => document.getElementById(id);
@@ -92,8 +92,7 @@
       $('sd-avg-stars').textContent=starString(avg);
       $('sd-review-count').textContent=reviews.length+' '+Hayyak.t('sd_review_word');
     }
-    // Always render a real review card for each Firestore review. Keep this
-    // independent from the scroll/reveal animation used elsewhere in Hayyak.
+
     let reviewCards = '';
     try {
       reviewCards=reviews.map((r,i)=>{
