@@ -1316,3 +1316,20 @@ html[lang="en"] .kicker{letter-spacing:.14em;text-transform:uppercase;font-size:
   .hero-xl .hero-bg img,.page-hero-bg img{animation:none}
   .scroll-cue{display:none}
 }
+
+/* Shared Firebase reviews: same styling language as the existing Site Details cards. */
+.rv-editor{background:#fff;border:1px solid var(--line);border-radius:18px;padding:1.6rem;margin:1.75rem 0;max-width:720px}
+.rv-editor h3{font-family:var(--f-head);font-weight:400;color:var(--palm-dark);margin:0 0 .8rem}
+.rv-editor form{display:grid;gap:.7rem}
+.rv-editor form[hidden],.rv-editor #rv-cancel[hidden],.rv-editor #rv-login-message[hidden]{display:none}
+.rv-editor label{font-size:.88rem;color:var(--palm-dark);font-weight:500}
+.rv-editor select,.rv-editor textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:.8rem;background:#fff;color:var(--palm-dark);font:inherit}
+.rv-editor textarea{resize:vertical}
+.rv-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.3rem}
+.rv-secondary{border:1px solid var(--line);background:#fff;color:var(--palm-dark)}
+.rv-card-buttons{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
+.rv-card-buttons button{font:inherit;font-size:.83rem;padding:.42rem .8rem;border:1px solid var(--line);border-radius:9px;background:#f8faf7;color:var(--palm-dark);cursor:pointer}
+.rv-card-buttons button:hover{border-color:var(--palm-dark)}
+.rv-status{font-size:.9rem;color:var(--palm-dark);margin:.3rem 0}
+.rv-status:empty{display:none}
+.rv-status.rv-error{color:#a22}

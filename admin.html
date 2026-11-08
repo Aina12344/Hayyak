@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard | Hayyak حيّاك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="admin-dashboard">
+  <div id="site-header"></div>
+
+  <main id="main" class="admin">
+    <section class="page-head">
+      <div class="wrap">
+        <p class="kicker intro" style="--d:0" data-i18n="ad_kicker"></p>
+        <h1 class="page-title"><span class="line"><span data-i18n="ad_title"></span></span></h1>
+        <p class="page-sub intro" style="--d:3" data-i18n="ad_sub"></p>
+      </div>
+    </section>
+
+    <div class="wrap admin-wrap">
+      <p class="form-alert" id="ad-flash" role="status" hidden></p>
+
+      <!-- Numbers -->
+      <section class="ad-stats intro" style="--d:4">
+        <div class="ad-stat"><span class="ico" data-icon="sites"></span><strong id="st-sites">0</strong><span data-i18n="st_sites"></span></div>
+        <div class="ad-stat"><span class="ico" data-icon="city"></span><strong id="st-cities">0</strong><span data-i18n="st_cities"></span></div>
+        <div class="ad-stat"><span class="ico" data-icon="tag"></span><strong id="st-types">0</strong><span data-i18n="st_types"></span></div>
+      </section>
+
+      <!-- Search, View heritage sites, Add site -->
+      <section class="ad-toolbar intro" style="--d:5">
+        <div class="filter-field filter-search">
+          <label for="ad-search" data-i18n="ad_search"></label>
+          <div class="filter-control">
+            <span class="ico" data-icon="search"></span>
+            <input type="search" id="ad-search" data-i18n-placeholder="ad_search_ph">
+          </div>
+        </div>
+        <a class="btn ad-btn-outline" href="sites.html" data-i18n="ad_view_sites"></a>
+        <a class="btn btn-green" href="admin-add.html"><span aria-hidden="true">+</span> <span data-i18n="ad_add_btn"></span></a>
+      </section>
+
+      <!-- Sites list -->
+      <section class="ad-panel ad-table-wrap intro" style="--d:6">
+        <table class="ad-table">
+          <thead>
+            <tr>
+              <th data-i18n="col_photo"></th>
+              <th data-i18n="col_name"></th>
+              <th data-i18n="col_city"></th>
+              <th data-i18n="col_type"></th>
+              <th data-i18n="col_actions"></th>
+            </tr>
+          </thead>
+          <tbody id="ad-rows"></tbody>
+        </table>
+        <p class="ad-empty" id="ad-empty" hidden></p>
+      </section>
+
+      <p class="ad-reset"><button type="button" class="link-btn" id="ad-reset" data-i18n="ad_reset"></button></p>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/sites.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

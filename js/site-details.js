@@ -180,35 +180,7 @@
   }
 
   function renderReviews() {
-    let all = [];
-    try {
-      const raw = localStorage.getItem("hayyakReviews");
-      all = raw ? JSON.parse(raw) : (window.heritageReviews || []);
-    } catch (e) { all = window.heritageReviews || []; }
-    const items = (Array.isArray(all) ? all : []).filter(function (r) { return String(r.siteID) === String(site.siteID); });
-
-    const list = $("sd-review-list");
-    $("sd-no-reviews").hidden = items.length > 0;
-    $("sd-score").hidden = items.length === 0;
-
-    const valid = items.map(function (r) { return Number(r.rating); }).filter(function (n) { return n >= 1 && n <= 5; });
-    if (valid.length) {
-      const avg = valid.reduce(function (a, b) { return a + b; }, 0) / valid.length;
-      $("sd-avg").textContent = avg.toFixed(1);
-      $("sd-avg-stars").textContent = stars(avg);
-      $("sd-review-count").textContent = items.length + " " + Hayyak.t("sd_review_word");
-    }
-
-    list.innerHTML = items.map(function (r, i) {
-      const who = r.reviewer || r.userName || Hayyak.t("sd_missing");
-      const date = r.date ? new Date(r.date).toLocaleDateString(lang() === "ar" ? "ar-SA" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) : "";
-      return '<li class="sd-review" data-reveal="up" style="--d:' + (i % 3) + '">' +
-        '<span class="sd-avatar" aria-hidden="true">' + esc(String(who).trim().charAt(0)) + "</span>" +
-        '<div class="sd-review-body"><div class="sd-review-head"><strong dir="auto">' + esc(who) + "</strong>" +
-        '<span class="sd-stars" aria-label="' + (Number(r.rating) || 0) + '/5">' + stars(Number(r.rating) || 0) + "</span></div>" +
-        "<p dir=\"auto\">" + esc(r.text || r.comment || "") + "</p>" +
-        (date ? '<time class="sd-review-date">' + esc(date) + "</time>" : "") + "</div></li>";
-    }).join("");
+    if (window.HayyakReviews) window.HayyakReviews.render();
   }
 
   /* other sites in the same city (or same classification if the city has no others) */

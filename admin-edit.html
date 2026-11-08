@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Site | Hayyak حيّاك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="admin-edit">
+  <div id="site-header"></div>
+
+  <main id="main" class="admin">
+    <section class="page-head">
+      <div class="wrap">
+        <a class="ad-back intro" href="admin.html"><span class="ad-back-ico" data-icon="chevron"></span><span data-i18n="ad_back"></span></a>
+        <p class="kicker intro" style="--d:0" data-i18n="ad_kicker"></p>
+        <h1 class="page-title"><span class="line"><span data-i18n="ad_edit_title"></span></span></h1>
+        <p class="page-sub intro" style="--d:3" data-i18n="ad_edit_sub"></p>
+      </div>
+    </section>
+
+    <div class="wrap admin-wrap">
+      <div class="ad-panel ad-missing" id="ad-missing" hidden>
+        <p data-i18n="e_not_found"></p>
+        <a class="btn btn-green" href="admin.html" data-i18n="ad_back"></a>
+      </div>
+      <form id="site-form" class="ad-panel ad-form intro" style="--d:4" novalidate>
+        <p class="form-alert" role="alert" hidden></p>
+
+        <fieldset>
+          <legend data-i18n="sec_names"></legend>
+          <div class="ad-grid">
+            <div class="ad-field" data-field="nameAr">
+              <label for="nameAr"><span data-i18n="f_nameAr"></span></label>
+              <div class="ad-control"><input id="nameAr" name="nameAr" type="text" dir="rtl"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="nameEn">
+              <label for="nameEn"><span data-i18n="f_nameEn"></span></label>
+              <div class="ad-control"><input id="nameEn" name="nameEn" type="text" dir="ltr"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="sec_place"></legend>
+          <div class="ad-grid">
+            <div class="ad-field" data-field="city">
+              <label for="city"><span data-i18n="f_city"></span></label>
+              <div class="ad-control"><select id="city" name="city"></select></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="classification">
+              <label for="classification"><span data-i18n="f_type"></span></label>
+              <div class="ad-control"><select id="classification" name="classification"></select></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="sec_desc"></legend>
+          <div class="ad-grid">
+            <div class="ad-field" data-field="descriptionAr">
+              <label for="descriptionAr"><span data-i18n="f_descAr"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><textarea id="descriptionAr" name="descriptionAr" rows="4" dir="rtl"></textarea></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="descriptionEn">
+              <label for="descriptionEn"><span data-i18n="f_descEn"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><textarea id="descriptionEn" name="descriptionEn" rows="4" dir="ltr"></textarea></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="sec_visit"></legend>
+          <div class="ad-grid">
+            <div class="ad-field" data-field="addressAr">
+              <label for="addressAr"><span data-i18n="f_addrAr"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><input id="addressAr" name="addressAr" type="text" dir="rtl"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="addressEn">
+              <label for="addressEn"><span data-i18n="f_addrEn"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><input id="addressEn" name="addressEn" type="text" dir="ltr"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="workingHoursAr">
+              <label for="workingHoursAr"><span data-i18n="f_hoursAr"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><input id="workingHoursAr" name="workingHoursAr" type="text" dir="rtl"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+            <div class="ad-field" data-field="workingHoursEn">
+              <label for="workingHoursEn"><span data-i18n="f_hoursEn"></span> <small data-i18n="f_optional"></small></label>
+              <div class="ad-control"><input id="workingHoursEn" name="workingHoursEn" type="text" dir="ltr"></div>
+              <p class="error" aria-live="polite"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span data-i18n="sec_photos"></span> <span class="ad-count" id="photo-count"></span></legend>
+          <div class="ad-field" data-field="photos">
+            <p class="ad-hint" data-i18n="f_photos_hint"></p>
+            <ul class="ad-photos" id="photo-grid"></ul>
+            <label class="btn ad-btn-outline ad-upload">
+              <input type="file" name="photoFiles" accept="image/*" multiple>
+              <span data-i18n="f_photos_btn"></span>
+            </label>
+            <p class="error" aria-live="polite"></p>
+          </div>
+        </fieldset>
+
+        <div class="ad-form-actions">
+          <button type="submit" class="btn btn-green" data-i18n="btn_save_edit"></button>
+          <a class="btn ad-btn-outline" href="admin.html" data-i18n="btn_cancel"></a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/sites.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

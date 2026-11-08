@@ -15,7 +15,7 @@
   /* ---------- 1. Translations ---------- */
   const TEXT = {
     ar: {
-      nav_home: "الرئيسية", nav_sites: "المواقع التراثية", nav_visits: "زياراتي القادمة",
+      nav_home: "الرئيسية", nav_sites: "المواقع التراثية", nav_visits: "زياراتي القادمة", nav_admin: "لوحة التحكم",
       login: "تسجيل الدخول", register: "إنشاء حساب", logout: "تسجيل الخروج",
       lang_switch: "EN", menu: "القائمة", hello: "أهلًا،",
       footer_about: "دليلك إلى المواقع التراثية والسياحية في المملكة، في مكان واحد.", footer_cities: "المدن", footer_account: "حسابي", footer_team: "فريق العمل", team_names: "Rema Aldosari · Haifa Alsulami · Wejdan Alkaladi · Dana Alattas · Shahad Alenzi", quick_cities: "مدن:", banner_t: "احفظ المواقع التي تودّ زيارتها", banner_d: "سجّل وأضفها إلى قائمة زياراتي القادمة.", banner_btn: "أنشئ حساب", banner_btn_in: "زياراتي القادمة",
@@ -46,7 +46,7 @@
       st_sites: "موقع تراثي", st_cities: "مدن ومناطق", st_types: "تصنيفات", st_langs: "لغتان: عربي وإنجليزي"
     },
     en: {
-      nav_home: "Home", nav_sites: "Heritage Sites", nav_visits: "My Upcoming Visits",
+      nav_home: "Home", nav_sites: "Heritage Sites", nav_visits: "My Upcoming Visits", nav_admin: "Dashboard",
       login: "Log in", register: "Sign up", logout: "Log out",
       lang_switch: "عربي", menu: "Menu", hello: "Hello,",
       footer_about: "Your guide to heritage and tourist sites across Saudi Arabia, in one place.", footer_cities: "Cities", footer_account: "My account", footer_team: "Team", team_names: "Rema Aldosari · Haifa Alsulami · Wejdan Alkaladi · Dana Alattas · Shahad Alenzi", quick_cities: "Cities:", banner_t: "Save the sites you want to visit", banner_d: "Sign up and add them to My Upcoming Visits.", banner_btn: "Sign up", banner_btn_in: "My Upcoming Visits",
@@ -116,8 +116,11 @@
   }
   function logout() {
     try { sessionStorage.removeItem(USER_KEY); } catch (e) {}
+    if (window.HayyakFirebase) window.HayyakFirebase.auth.signOut().catch(console.error);
     window.location.href = "index.html";
   }
+
+  document.addEventListener("hayyak:auth", function () { if (document.getElementById("site-header")) renderHeader(); });
 
   /* ---------- 3. Icons ---------- */
   const P = {
@@ -169,8 +172,10 @@
     return p || "index.html";
   }
 
-  function navLink(href, key, user, touristOnly) {
-    if (touristOnly && !(user && user.role === "tourist")) return "";
+  /* onlyFor: "tourist" or "admin" shows the link to that role only */
+  function navLink(href, key, user, onlyFor) {
+    if (onlyFor === true) onlyFor = "tourist";
+    if (onlyFor && !(user && user.role === onlyFor)) return "";
     const current = currentPage() === href ? ' aria-current="page"' : "";
     return '<a href="' + href + '"' + current + ' data-i18n="' + key + '">' + t(key) + "</a>";
   }
@@ -194,6 +199,7 @@
             navLink("index.html", "nav_home", user) +
             navLink("sites.html", "nav_sites", user) +
             navLink("upcoming.html", "nav_visits", user, true) +
+            navLink("admin.html", "nav_admin", user, "admin") +
           "</nav>" +
           '<div class="actions">' +
             '<button type="button" class="link-btn" id="lang-btn" data-i18n="lang_switch">' + t("lang_switch") + "</button>" +
@@ -223,6 +229,21 @@
 
   const FOOTER_CITIES = [["Riyadh","الرياض"],["Jeddah","جدة"],["AlUla","العلا"],["Diriyah","الدرعية"],["Asir","عسير"]];
 
+  /* The footer lists the cities that have heritage sites, so a city the admin adds
+     (for example Jazan) appears here too. Pages without js/sites.js read the admin's saved list. */
+  function footerCities() {
+    let list = typeof heritageSites !== "undefined" ? heritageSites : null;
+    if (!list) {
+      try { const saved = JSON.parse(localStorage.getItem("hayyak.sites")); if (Array.isArray(saved)) list = saved; } catch (e) {}
+    }
+    if (!list) return FOOTER_CITIES;
+    const cities = [];
+    list.forEach(function (site) {
+      if (site.cityEn && !cities.some(function (c) { return c[0] === site.cityEn; })) cities.push([site.cityEn, site.cityAr || site.cityEn]);
+    });
+    return cities;
+  }
+
   function renderFooter() {
     const host = document.getElementById("site-footer");
     if (!host) return;
@@ -231,6 +252,7 @@
     function link(href, key) { return '<li><a href="' + href + '" data-i18n="' + key + '">' + t(key) + "</a></li>"; }
     const account = user
       ? (user.role === "tourist" ? link("upcoming.html", "nav_visits") : "") +
+        (user.role === "admin" ? link("admin.html", "nav_admin") : "") +
         '<li><button type="button" class="link-btn" id="footer-logout" data-i18n="logout">' + t("logout") + "</button></li>"
       : link("login.html", "login") + link("register.html", "register");
 
@@ -244,8 +266,8 @@
           '<div><h4 data-i18n="footer_links">' + t("footer_links") + "</h4><ul>" +
             link("index.html", "nav_home") + link("sites.html", "nav_sites") + "</ul></div>" +
           '<div><h4 data-i18n="footer_cities">' + t("footer_cities") + "</h4><ul>" +
-            FOOTER_CITIES.map(function (c) {
-              return '<li><a href="sites.html?city=' + c[0] + '">' + (ar ? c[1] : c[0]) + "</a></li>";
+            footerCities().map(function (c) {
+              return '<li><a href="sites.html?city=' + encodeURIComponent(c[0]) + '">' + esc(ar ? c[1] : c[0]) + "</a></li>";
             }).join("") + "</ul></div>" +
           '<div><h4 data-i18n="footer_account">' + t("footer_account") + "</h4><ul>" + account + "</ul></div>" +
         "</div>" +
@@ -280,6 +302,25 @@
 
   renderHeader();
   renderFooter();
+
+  /* When the admin adds, edits or deletes a site in another tab, update this page right away */
+  window.addEventListener("storage", function (e) {
+    if (e.key !== "hayyak.sites") return;
+    const page = document.body.getAttribute("data-page") || "";
+    if (page === "admin-add" || page === "admin-edit") {
+      /* do not reload a form the admin is filling in; only refresh the data and the footer */
+      try {
+        const saved = JSON.parse(e.newValue);
+        if (Array.isArray(saved) && typeof heritageSites !== "undefined") {
+          heritageSites.length = 0;
+          saved.forEach(function (site) { heritageSites.push(site); });
+        }
+      } catch (err) {}
+      renderFooter();
+    } else {
+      window.location.reload();
+    }
+  });
   applyLang();
   applyIcons();
   /* run after the page's own script has added its content */

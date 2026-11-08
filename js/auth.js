@@ -154,10 +154,12 @@
     });
   });
 
-  function goAfterLogin(form, key) {
+  function goAfterLogin(form, key, role) {
     showAlert(form, key, "success");
     form.querySelector("button[type=submit]").disabled = true;
-    setTimeout(function () { window.location.href = "index.html"; }, 1200);
+    /* the admin goes to the Admin Dashboard, the tourist goes to the Home Page */
+    const next = role === "admin" ? "admin.html" : "index.html";
+    setTimeout(function () { window.location.href = next; }, 1200);
   }
 
   /* ---------- Register page ---------- */
@@ -205,9 +207,22 @@
         password: pass.value,
         role: "tourist"
       };
-      saveUser(user);
-      Hayyak.login({ name: user.fullName.split(" ")[0], email: user.email, role: user.role });
-      goAfterLogin(reg, "ok_register");
+      const submit = reg.querySelector("button[type=submit]");
+      submit.disabled = true;
+      window.HayyakFirebase.auth.createUserWithEmailAndPassword(user.email, user.password)
+        .then(async function (credential) {
+          await credential.user.updateProfile({ displayName: user.fullName });
+          await credential.user.getIdToken(true); // refresh display name claim for review security rules
+          Hayyak.login({ name: user.fullName, email: user.email, role: "tourist", uid: credential.user.uid });
+          goAfterLogin(reg, "ok_register");
+        })
+        .catch(function (err) {
+          submit.disabled = false;
+          showAlert(reg, "", "error");
+          const alert = reg.querySelector(".form-alert");
+          alert.hidden = false;
+          alert.textContent = err.code === "auth/email-already-in-use" ? Hayyak.t("e_email_used") : (err.message || Hayyak.t("e_login"));
+        });
     });
   }
 
@@ -233,15 +248,27 @@
       ].every(Boolean);
       if (!ok) { log.querySelector(".invalid input").focus(); return; }
 
-      const user = findUser(email.value.trim());
-      if (!user || user.password !== pass.value) {
-        showAlert(log, "e_login", "error");   // same message for both cases, so emails can't be guessed
-        pass.value = "";
-        pass.focus();
+      // Legacy demo admin login remains local; tourist accounts use Firebase Authentication.
+      const legacyAdmin = ADMINS.find(function (u) { return u.email.toLowerCase() === email.value.trim().toLowerCase() && u.password === pass.value; });
+      if (legacyAdmin) {
+        Hayyak.login({ name: legacyAdmin.fullName, email: legacyAdmin.email, role: "admin" });
+        goAfterLogin(log, "ok_login", "admin");
         return;
       }
-      Hayyak.login({ name: user.fullName.split(" ")[0], email: user.email, role: user.role });
-      goAfterLogin(log, "ok_login");
+      const submit = log.querySelector("button[type=submit]");
+      submit.disabled = true;
+      window.HayyakFirebase.auth.signInWithEmailAndPassword(email.value.trim(), pass.value)
+        .then(function (credential) {
+          const u = credential.user;
+          Hayyak.login({ name: u.displayName || u.email.split("@")[0], email: u.email, role: "tourist", uid: u.uid });
+          goAfterLogin(log, "ok_login", "tourist");
+        })
+        .catch(function () {
+          submit.disabled = false;
+          showAlert(log, "e_login", "error");
+          pass.value = "";
+          pass.focus();
+        });
     });
   }
 })();

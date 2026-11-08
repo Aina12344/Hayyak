@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delete Site | Hayyak حيّاك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="admin-delete">
+  <div id="site-header"></div>
+
+  <main id="main" class="admin">
+    <section class="page-head">
+      <div class="wrap">
+        <a class="ad-back intro" href="admin.html"><span class="ad-back-ico" data-icon="chevron"></span><span data-i18n="ad_back"></span></a>
+        <p class="kicker intro" style="--d:0" data-i18n="ad_kicker"></p>
+        <h1 class="page-title"><span class="line"><span data-i18n="ad_del_title"></span></span></h1>
+        <p class="page-sub intro" style="--d:3" data-i18n="ad_del_sub"></p>
+      </div>
+    </section>
+
+    <div class="wrap admin-wrap">
+      <div class="ad-panel ad-missing" id="ad-missing" hidden>
+        <p data-i18n="e_not_found"></p>
+        <a class="btn btn-green" href="admin.html" data-i18n="ad_back"></a>
+      </div>
+      <section class="ad-panel ad-delete intro" style="--d:4" id="del-card">
+        <p class="form-alert" id="del-alert" role="alert" hidden></p>
+        <div class="ad-del-site">
+          <img id="del-photo" src="" alt="">
+          <div>
+            <h2 id="del-name" dir="auto"></h2>
+            <p class="ad-del-alt" id="del-name-alt" dir="auto"></p>
+            <dl class="ad-del-info">
+              <div><dt data-i18n="lbl_city"></dt><dd id="del-city"></dd></div>
+              <div><dt data-i18n="lbl_type"></dt><dd id="del-type"></dd></div>
+              <div><dt data-i18n="lbl_photos"></dt><dd id="del-count"></dd></div>
+            </dl>
+          </div>
+        </div>
+        <p class="ad-warn" data-i18n="del_warn"></p>
+        <div class="ad-form-actions">
+          <button type="button" class="btn ad-btn-danger" id="del-confirm" data-i18n="btn_confirm_del"></button>
+          <a class="btn ad-btn-outline" href="admin.html" data-i18n="btn_cancel"></a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/sites.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

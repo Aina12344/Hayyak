@@ -324,3 +324,21 @@ const heritageSites = [
     ]
   }
 ];
+
+/* Admin changes (Add / Edit / Delete Site) are saved in the browser.
+   If the admin has saved changes, every page uses that list instead of the sample data above. */
+const HAYYAK_SITES_KEY = "hayyak.sites";
+(function () {
+  try {
+    const saved = JSON.parse(localStorage.getItem(HAYYAK_SITES_KEY));
+    if (Array.isArray(saved)) {
+      heritageSites.length = 0;
+      saved.forEach(function (site) { heritageSites.push(site); });
+    }
+  } catch (e) { /* keep the sample data */ }
+})();
+
+/* Photos added by the admin are served by sw.js, so register it on every page */
+if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+  navigator.serviceWorker.register("sw.js").catch(function () {});
+}

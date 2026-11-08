@@ -79,6 +79,23 @@
         <p class="sd-empty" id="sd-no-reviews" data-reveal="up" hidden>
           <span class="sd-empty-ico" data-icon="star"></span><span data-i18n="sd_no_reviews"></span>
         </p>
+        <div class="rv-status" id="rv-status" role="status" aria-live="polite"></div>
+        <div class="rv-editor" id="rv-editor">
+          <h3 id="rv-form-title"></h3>
+          <p id="rv-login-message"></p>
+          <form id="rv-form" hidden>
+            <label id="rv-rating-label" for="rv-rating"></label>
+            <select id="rv-rating" required>
+              <option value="">—</option>
+              <option value="1">★</option><option value="2">★★</option><option value="3">★★★</option>
+              <option value="4">★★★★</option><option value="5">★★★★★</option>
+            </select>
+            <label id="rv-text-label" for="rv-text"></label>
+            <textarea id="rv-text" maxlength="2000" rows="3" required></textarea>
+            <div class="rv-actions"><button class="btn btn-green" id="rv-save" type="submit"></button>
+              <button class="btn rv-secondary" id="rv-cancel" type="button" hidden></button></div>
+          </form>
+        </div>
         <ul class="sd-review-list" id="sd-review-list"></ul>
       </section>
 
@@ -96,7 +113,12 @@
   <div id="site-footer"></div>
 
   <script src="js/sites.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
   <script src="js/layout.js"></script>
   <script src="js/site-details.js"></script>
+  <script src="js/reviews-firebase.js"></script>
 </body>
 </html>
