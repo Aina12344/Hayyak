@@ -2,7 +2,17 @@
 (function () {
   "use strict";
   const $ = id => document.getElementById(id);
-  if (!$('sd-review-form') || !window.HayyakFirebase) return;
+  if (!$('sd-review-form')) return;
+  if (!window.HayyakFirebase || !window.HayyakFirebase.db) {
+    const status = $('sd-review-status');
+    if (status) {
+      status.hidden = false;
+      status.textContent = "Reviews could not connect. Check your connection and refresh the page.";
+      status.classList.add('is-error');
+    }
+    console.error('Hayyak Reviews: Firebase Firestore SDK or initialization unavailable.');
+    return;
+  }
   window.HayyakReviewLoaded = true;
   const { auth, db } = window.HayyakFirebase;
   const params = new URLSearchParams(window.location.search);

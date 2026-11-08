@@ -209,6 +209,14 @@
       };
       const submit = reg.querySelector("button[type=submit]");
       submit.disabled = true;
+      if (!window.HayyakFirebase || !window.HayyakFirebase.auth) {
+        submit.disabled = false;
+        showAlert(reg, "", "error");
+        const alert = reg.querySelector(".form-alert");
+        alert.hidden = false;
+        alert.textContent = "Firebase login is unavailable. Check your internet connection and refresh the page.";
+        return;
+      }
       window.HayyakFirebase.auth.createUserWithEmailAndPassword(user.email, user.password)
         .then(async function (credential) {
           await credential.user.updateProfile({ displayName: user.fullName });
@@ -257,6 +265,14 @@
       }
       const submit = log.querySelector("button[type=submit]");
       submit.disabled = true;
+      if (!window.HayyakFirebase || !window.HayyakFirebase.auth) {
+        submit.disabled = false;
+        showAlert(log, "", "error");
+        const alert = log.querySelector(".form-alert");
+        alert.hidden = false;
+        alert.textContent = "Firebase login is unavailable. Check your internet connection and refresh the page.";
+        return;
+      }
       window.HayyakFirebase.auth.signInWithEmailAndPassword(email.value.trim(), pass.value)
         .then(function (credential) {
           const u = credential.user;
