@@ -1333,3 +1333,36 @@ html[lang="en"] .kicker{letter-spacing:.14em;text-transform:uppercase;font-size:
 .rv-status{font-size:.9rem;color:var(--palm-dark);margin:.3rem 0}
 .rv-status:empty{display:none}
 .rv-status.rv-error{color:#a22}
+
+/* Restored original Sprint 2 star rating interface */
+/* Sprint 2: review editor — uses the existing Hayyak green/lavender palette. */
+.sd-review-compose{border:1px solid var(--line);border-radius:20px;padding:clamp(1.2rem,3vw,2rem);background:linear-gradient(130deg,#fff,#f7f6fb);margin-bottom:1.5rem}
+.sd-review-compose-intro{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.sd-review-compose h3{font-weight:400;font-size:1.25rem;margin:.2rem 0;color:var(--palm-dark)}
+.sd-review-hint{color:var(--muted);font-size:.92rem;margin:0;max-width:37rem}
+.sd-review-compose form{margin-top:1.2rem;display:grid;gap:.75rem}
+.sd-review-compose form[hidden],.sd-review-login[hidden],.sd-review-feedback[hidden],.sd-review-secondary[hidden]{display:none}
+.sd-rating-picker{margin:0;padding:0;border:0}
+.sd-rating-picker legend,.sd-review-label{font-size:.92rem;font-weight:500;color:var(--palm-dark);margin-bottom:.35rem}
+.sd-rating-options{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.5rem}
+.sd-rating-options label{cursor:pointer;position:relative}
+.sd-rating-options input{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer}
+.sd-rating-options span{display:inline-flex;align-items:center;justify-content:center;width:45px;height:45px;border:1px solid #d9d3ea;border-radius:12px;background:#fff;color:#b8913a;font-size:1.5rem;transition:.2s}
+.sd-rating-options input:checked + span{background:var(--lavender-soft);border-color:var(--lavender-dark);box-shadow:0 0 0 1px var(--lavender-dark)}
+.sd-rating-options input:focus-visible + span{outline:2px solid var(--lavender-dark);outline-offset:2px}
+.sd-rating-options small{display:block;text-align:center;color:var(--muted)}
+#sd-review-text{width:100%;resize:vertical;min-height:110px;border-radius:14px;padding:1rem;border:1px solid #d9dce2;background:#fff;color:var(--ink);font:inherit}
+#sd-review-text:focus{outline:2px solid var(--lavender);border-color:transparent}
+.sd-review-form-actions,.sd-review-actions{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+.sd-review-primary,.sd-review-secondary{font:inherit;cursor:pointer;text-decoration:none;text-align:center;border-radius:999px;padding:.72rem 1.45rem;border:1px solid var(--palm-dark)}
+.sd-review-primary{background:var(--palm-dark);color:#fff}
+.sd-review-primary:hover{background:var(--lavender-dark);border-color:var(--lavender-dark)}
+.sd-review-secondary{background:transparent;color:var(--palm-dark)}
+.sd-review-login{display:inline-block;margin-top:1rem}
+.sd-review-feedback{margin:.25rem 0;color:var(--palm-dark)}
+.sd-review-feedback.is-error{color:#a63c3c}
+.sd-review-actions{margin-top:.8rem}
+.sd-review-actions button{cursor:pointer;border:1px solid #d9d3ea;background:#fff;color:var(--lavender-dark);border-radius:999px;font:inherit;padding:.25rem .9rem}
+.sd-review-actions button:hover{background:var(--lavender-soft)}
+.sd-review-actions .is-delete{color:#a34a4a}
+

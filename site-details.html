@@ -79,23 +79,31 @@
         <p class="sd-empty" id="sd-no-reviews" data-reveal="up" hidden>
           <span class="sd-empty-ico" data-icon="star"></span><span data-i18n="sd_no_reviews"></span>
         </p>
-        <div class="rv-status" id="rv-status" role="status" aria-live="polite"></div>
-        <div class="rv-editor" id="rv-editor">
-          <h3 id="rv-form-title"></h3>
-          <p id="rv-login-message"></p>
-          <form id="rv-form" hidden>
-            <label id="rv-rating-label" for="rv-rating"></label>
-            <select id="rv-rating" required>
-              <option value="">—</option>
-              <option value="1">★</option><option value="2">★★</option><option value="3">★★★</option>
-              <option value="4">★★★★</option><option value="5">★★★★★</option>
-            </select>
-            <label id="rv-text-label" for="rv-text"></label>
-            <textarea id="rv-text" maxlength="2000" rows="3" required></textarea>
-            <div class="rv-actions"><button class="btn btn-green" id="rv-save" type="submit"></button>
-              <button class="btn rv-secondary" id="rv-cancel" type="button" hidden></button></div>
+        <div class="sd-review-compose" id="sd-review-compose">
+          <div class="sd-review-compose-intro">
+            <div><p class="sd-eyebrow" data-i18n="sd_write_eyebrow"></p><h3 data-i18n="sd_write_title"></h3></div>
+            <p id="sd-review-hint" class="sd-review-hint" role="status"></p>
+          </div>
+          <form id="sd-review-form" novalidate hidden>
+            <input type="hidden" id="sd-review-edit-id">
+            <fieldset class="sd-rating-picker"><legend data-i18n="sd_choose_rating"></legend>
+              <div class="sd-rating-options" id="sd-rating-options" role="radiogroup" aria-label="Rating">
+                <label><input type="radio" name="rating" value="1"><span>★</span><small>1</small></label>
+                <label><input type="radio" name="rating" value="2"><span>★</span><small>2</small></label>
+                <label><input type="radio" name="rating" value="3"><span>★</span><small>3</small></label>
+                <label><input type="radio" name="rating" value="4"><span>★</span><small>4</small></label>
+                <label><input type="radio" name="rating" value="5"><span>★</span><small>5</small></label>
+              </div>
+            </fieldset>
+            <label class="sd-review-label" for="sd-review-text" data-i18n="sd_review_text"></label>
+            <textarea id="sd-review-text" rows="4" maxlength="2000" required data-i18n-placeholder="sd_review_placeholder"></textarea>
+            <p class="sd-review-feedback" id="sd-review-feedback" role="alert" aria-live="polite" hidden></p>
+            <div class="sd-review-form-actions"><button type="submit" class="sd-review-primary" id="sd-review-submit" data-i18n="sd_post_review"></button>
+              <button type="button" class="sd-review-secondary" id="sd-review-cancel" data-i18n="sd_cancel" hidden></button></div>
           </form>
+          <a id="sd-review-login" class="sd-review-primary sd-review-login" href="login.html" data-i18n="sd_login_review" hidden></a>
         </div>
+
         <ul class="sd-review-list" id="sd-review-list"></ul>
       </section>
 

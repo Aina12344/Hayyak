@@ -1,102 +1,137 @@
-/* Shared Reviews feature — Firebase Auth + Cloud Firestore; no PHP or localhost needed. */
+/* Hayyak reviews: original star-picker interface + shared Firebase Firestore storage. */
 (function () {
-  'use strict';
-  const $ = (id) => document.getElementById(id);
+  "use strict";
+  const $ = id => document.getElementById(id);
+  if (!$('sd-review-form') || !window.HayyakFirebase) return;
   const { auth, db } = window.HayyakFirebase;
-  const sid = new URLSearchParams(location.search).get('id') || new URLSearchParams(location.search).get('siteID');
-  if (!sid || !$('rv-editor')) return;
-  let reviews = [], editing = false, ready = false, currentAuth = null;
-  const copy = {
-    en: { title:'Add your review', edit:'Edit your review', login:'Log in to add a review.', rating:'Rating (1–5 stars)', text:'Your review',save:'Submit review',update:'Save changes',cancel:'Cancel',editBtn:'Edit',delBtn:'Delete',confirm:'Delete your review?',already:'You have already reviewed this site. You may edit or delete your review.',empty:'Select a star rating and enter your review.',load:'Loading reviews…',error:'Could not load reviews. Check your Firebase settings and connection.',saved:'Review saved.',deleted:'Review deleted.',cancelled:'Deletion cancelled.',working:'Saving…',loginLink:'Log in'},
-    ar: { title:'أضف تقييمك', edit:'تعديل تقييمك', login:'سجّل الدخول لإضافة تقييم.', rating:'التقييم (من ١ إلى ٥ نجوم)', text:'نص التقييم',save:'إرسال التقييم',update:'حفظ التعديلات',cancel:'إلغاء',editBtn:'تعديل',delBtn:'حذف',confirm:'هل تريد حذف تقييمك؟',already:'لقد قيّمت هذا الموقع بالفعل. يمكنك تعديل تقييمك أو حذفه.',empty:'اختر عدد النجوم واكتب تقييمك.',load:'جارٍ تحميل التقييمات…',error:'تعذّر تحميل التقييمات. تحقق من إعدادات Firebase والاتصال.',saved:'تم حفظ التقييم.',deleted:'تم حذف التقييم.',cancelled:'تم إلغاء الحذف.',working:'جارٍ الحفظ…',loginLink:'تسجيل الدخول'}
+  const params = new URLSearchParams(window.location.search);
+  const siteID = (params.get('id') || params.get('siteID') || '').trim();
+  if (!siteID) return;
+  const collection = db.collection('reviews');
+  const locale = {
+    en: {
+      eyebrow:'Share your experience', title:'Write a review', signin:'Log in to leave a review. Anyone can read existing reviews.',
+      login:'Log in to write a review', rating:'Rate this site (1 to 5)', text:'Your review', placeholder:'Tell other visitors about your experience…',
+      submit:'Post review', update:'Save changes', cancel:'Cancel', edit:'Edit', delete:'Delete',
+      already:'You have already reviewed this site. You can edit or delete your review below.',
+      invalid:'Select a rating from 1 to 5 and enter review text.', saved:'Your review was published.',
+      updated:'Your review was updated.', deleted:'Your review was deleted.',
+      confirm:'Delete your review? This cannot be undone.', working:'Saving…',
+      failed:'Unable to save the review. Please check the connection and Firebase rules.',
+      loading:'Loading reviews…', loadError:'Could not load reviews. Please check the Firebase settings.'
+    },
+    ar: {
+      eyebrow:'شارك تجربتك', title:'أضف تقييمك', signin:'سجّل الدخول لإضافة تقييم. يمكنك قراءة تقييمات الزوار بدون تسجيل.',
+      login:'سجّل الدخول لكتابة تقييم', rating:'تقييم الموقع (من ١ إلى ٥)', text:'اكتب تجربتك', placeholder:'شاركنا تجربتك مع هذا الموقع التراثي…',
+      submit:'نشر التقييم', update:'حفظ التعديلات', cancel:'إلغاء', edit:'تعديل', delete:'حذف',
+      already:'لقد قيّمت هذا الموقع من قبل. يمكنك تعديل تقييمك أو حذفه أدناه.',
+      invalid:'اختر تقييمًا من ١ إلى ٥ واكتب نص التقييم.', saved:'تم نشر تقييمك بنجاح.',
+      updated:'تم تحديث تقييمك.', deleted:'تم حذف تقييمك.',
+      confirm:'هل تريد حذف تقييمك؟ لا يمكن التراجع عن الحذف.', working:'جارٍ الحفظ…',
+      failed:'تعذّر حفظ التقييم. تحقق من الاتصال وقواعد Firebase.',
+      loading:'جارٍ تحميل التقييمات…', loadError:'تعذّر تحميل التقييمات. تحقق من إعدادات Firebase.'
+    }
   };
-  const t = (key) => copy[Hayyak.getLang() === 'ar' ? 'ar' : 'en'][key];
-  const esc = Hayyak.esc;
-  const reviewsRef = db.collection('reviews');
-  const docId = () => sid + '_' + currentAuth.uid;
-  const own = () => reviews.find(r => currentAuth && r.userID === currentAuth.uid);
-  const stars = (v) => '★★★★★'.slice(0, Math.round(v)) + '☆☆☆☆☆'.slice(0, 5 - Math.round(v));
-  const setStatus = (message, error) => { $('rv-status').textContent = message; $('rv-status').classList.toggle('rv-error', !!error); };
-  function render() {
-    if (!ready) return;
-    const list = $('sd-review-list');
-    const valid = reviews.map(r => Number(r.rating)).filter(r => Number.isInteger(r) && r >= 1 && r <= 5);
-    const count = reviews.length;
-    $('sd-no-reviews').hidden = count !== 0;
-    $('sd-score').hidden = valid.length === 0;
-    if (valid.length) {
-      const avg = valid.reduce((x,y) => x+y,0) / valid.length;
-      $('sd-avg').textContent = avg.toFixed(1);
-      $('sd-avg-stars').textContent = stars(avg);
-      $('sd-review-count').textContent = count + ' ' + Hayyak.t('sd_review_word');
-    }
-    list.innerHTML = reviews.map((r,i) => {
-      const date = r.createdAt && r.createdAt.toDate ? r.createdAt.toDate().toLocaleDateString(Hayyak.getLang() === 'ar' ? 'ar-SA' : 'en-GB') : '';
-      const owner = currentAuth && r.userID === currentAuth.uid;
-      return '<li class="sd-review" style="--d:' + (i%3) + '"><span class="sd-avatar" aria-hidden="true">' + esc((r.reviewer || '?').charAt(0)) + '</span>' +
-        '<div class="sd-review-body"><div class="sd-review-head"><strong dir="auto">' + esc(r.reviewer || '') + '</strong><span class="sd-stars" aria-label="' + Number(r.rating) + '/5">' + stars(Number(r.rating)) + '</span></div>' +
-        '<p dir="auto">' + esc(r.text || '') + '</p><time class="sd-review-date">' + esc(date) + '</time>' +
-        (owner ? '<div class="rv-card-buttons"><button type="button" data-review-edit="1">' + t('editBtn') + '</button><button type="button" data-review-delete="1">' + t('delBtn') + '</button></div>' : '') + '</div></li>';
-    }).join('');
-    $('rv-form-title').textContent = editing ? t('edit') : t('title');
-    $('rv-rating-label').textContent = t('rating');
-    $('rv-text-label').textContent = t('text');
-    $('rv-save').textContent = editing ? t('update') : t('save');
-    $('rv-cancel').textContent = t('cancel');
-    const signedIn = !!currentAuth;
-    const found = own();
-    $('rv-form').hidden = !signedIn || (!!found && !editing);
-    $('rv-login-message').hidden = signedIn && (!found || editing);
-    if (!signedIn) $('rv-login-message').innerHTML = '<a href="login.html">' + t('login') + '</a>';
-    else if (found && !editing) $('rv-login-message').textContent = t('already');
-    else $('rv-login-message').textContent = '';
-    $('rv-cancel').hidden = !editing;
+  const L = key => locale[Hayyak.getLang() === 'en' ? 'en' : 'ar'][key];
+  const escapeHTML = Hayyak.esc;
+  const form = $('sd-review-form');
+  let user = null, reviews = [], editing = false, ready = false, busy = false;
+  const own = () => reviews.find(r => user && r.userID === user.uid);
+  const docID = () => siteID + '_' + user.uid;
+  const starString = n => '★★★★★'.slice(0, Math.round(n)) + '☆☆☆☆☆'.slice(0, 5 - Math.round(n));
+  function feedback(text, error) {
+    const el = $('sd-review-feedback');
+    el.textContent = text || '';
+    el.hidden = !text;
+    el.classList.toggle('is-error', !!error);
   }
-  $('rv-form').addEventListener('submit', async e => {
+  function reset() {
+    editing = false;
+    form.reset();
+    $('sd-review-edit-id').value = '';
+    feedback('');
+  }
+  function render() {
+    document.querySelector('.sd-review-compose').querySelector('[data-i18n="sd_write_eyebrow"]').textContent=L('eyebrow');
+    document.querySelector('.sd-review-compose').querySelector('[data-i18n="sd_write_title"]').textContent=L('title');
+    document.querySelector('.sd-review-compose').querySelector('[data-i18n="sd_choose_rating"]').textContent=L('rating');
+    document.querySelector('.sd-review-compose').querySelector('[data-i18n="sd_review_text"]').textContent=L('text');
+    $('sd-review-text').placeholder=L('placeholder');
+    $('sd-review-submit').textContent=editing?L('update'):L('submit');
+    $('sd-review-cancel').textContent=L('cancel');
+    $('sd-review-login').textContent=L('login');
+    $('sd-review-cancel').hidden=!editing;
+    const mine=own();
+    $('sd-review-hint').textContent=!user?L('signin'):(mine&&!editing?L('already'):'');
+    $('sd-review-login').hidden=!!user;
+    form.hidden=!user || (!!mine&&!editing);
+    const list=$('sd-review-list');
+    $('sd-no-reviews').hidden=!ready || reviews.length>0;
+    const valid=reviews.map(r=>Number(r.rating)).filter(n=>Number.isInteger(n)&&n>=1&&n<=5);
+    $('sd-score').hidden=!valid.length;
+    if(valid.length){
+      const avg=valid.reduce((a,b)=>a+b,0)/valid.length;
+      $('sd-avg').textContent=avg.toFixed(1);
+      $('sd-avg-stars').textContent=starString(avg);
+      $('sd-review-count').textContent=reviews.length+' '+Hayyak.t('sd_review_word');
+    }
+    list.innerHTML=reviews.map((r,i)=>{
+      const who=String(r.reviewer||'Visitor');
+      const dt=r.createdAt&&typeof r.createdAt.toDate==='function' ? r.createdAt.toDate() : null;
+      const date=dt?dt.toLocaleDateString(Hayyak.getLang()==='ar'?'ar-SA':'en-GB',{year:'numeric',month:'long',day:'numeric'}):'';
+      const isOwner=!!user&&r.userID===user.uid;
+      const buttons=isOwner?'<div class="sd-review-actions"><button type="button" data-review-action="edit">'+L('edit')+'</button><button type="button" class="is-delete" data-review-action="delete">'+L('delete')+'</button></div>':'';
+      return '<li class="sd-review" data-reveal="up" style="--d:'+(i%3)+'"><span class="sd-avatar" aria-hidden="true">'+escapeHTML(who.trim().charAt(0))+'</span>'+ 
+        '<div class="sd-review-body"><div class="sd-review-head"><strong dir="auto">'+escapeHTML(who)+'</strong><span class="sd-stars" aria-label="'+Number(r.rating)+'/5">'+starString(Number(r.rating))+'</span></div>'+ 
+        '<p dir="auto">'+escapeHTML(r.text||'')+'</p>'+(date?'<time class="sd-review-date">'+escapeHTML(date)+'</time>':'')+buttons+'</div></li>';
+    }).join('');
+  }
+  form.addEventListener('submit',async e=>{
     e.preventDefault();
-    if (!currentAuth) return;
-    const rating = Number($('rv-rating').value);
-    const text = $('rv-text').value.trim();
-    if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !text) { setStatus(t('empty'),true); return; }
-    const button = $('rv-save');
-    button.disabled = true;
-    setStatus(t('working'));
-    try {
-      if (editing) {
-        await reviewsRef.doc(docId()).update({rating,text,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
-      } else {
-        if (own()) throw new Error(t('already'));
-        await reviewsRef.doc(docId()).set({siteID:String(sid),userID:currentAuth.uid,reviewer:currentAuth.displayName || currentAuth.email.split('@')[0],rating,text,createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    if(!user||busy)return;
+    const chosen=form.querySelector('input[name="rating"]:checked');
+    const rating=chosen?Number(chosen.value):NaN;
+    const text=$('sd-review-text').value.trim();
+    if(!Number.isInteger(rating)||rating<1||rating>5||!text){feedback(L('invalid'),true);return;}
+    busy=true;$('sd-review-submit').disabled=true;feedback(L('working'));
+    try{
+      if(editing){
+        if(!own())throw new Error(L('failed'));
+        await collection.doc(docID()).update({rating,text,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      }else{
+        if(own())throw new Error(L('already'));
+        await collection.doc(docID()).set({siteID,userID:user.uid,reviewer:user.displayName||user.email.split('@')[0],rating,text,createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
       }
-      editing = false;
-      $('rv-form').reset();
-      setStatus(t('saved'));
-    } catch (err) { setStatus(err.message || t('error'),true); }
-    finally { button.disabled = false; render(); }
+      const msg=editing?L('updated'):L('saved');
+      reset();render();feedback(msg);
+    }catch(err){console.error('Review save failed',err);feedback(err.message||L('failed'),true);}
+    finally{busy=false;$('sd-review-submit').disabled=false;}
   });
-  $('rv-cancel').addEventListener('click', () => { editing = false; $('rv-form').reset(); setStatus(''); render(); });
-  $('sd-review-list').addEventListener('click', async e => {
-    if (!currentAuth || !own()) return;
-    if (e.target.closest('[data-review-edit]')) {
-      editing = true;
-      $('rv-rating').value = String(own().rating);
-      $('rv-text').value = own().text;
-      setStatus(''); render();
-      $('rv-editor').scrollIntoView({behavior:'smooth',block:'center'});
-    } else if (e.target.closest('[data-review-delete]')) {
-      if (!window.confirm(t('confirm'))) { setStatus(t('cancelled')); return; }
-      try { await reviewsRef.doc(docId()).delete(); editing = false; $('rv-form').reset(); setStatus(t('deleted')); }
-      catch (err) { setStatus(err.message || t('error'),true); }
+  $('sd-review-cancel').addEventListener('click',()=>{reset();render();});
+  $('sd-review-list').addEventListener('click',async e=>{
+    const button=e.target.closest('button[data-review-action]');
+    if(!button||!user||!own()||busy)return;
+    if(button.dataset.reviewAction==='edit'){
+      const item=own();editing=true;
+      $('sd-review-edit-id').value=docID();
+      $('sd-review-text').value=item.text||'';
+      const radio=form.querySelector('input[name="rating"][value="'+item.rating+'"]');
+      if(radio)radio.checked=true;
+      render();feedback('');form.scrollIntoView({behavior:'smooth',block:'center'});
+    }else if(button.dataset.reviewAction==='delete'){
+      if(!window.confirm(L('confirm')))return;
+      busy=true;
+      try{await collection.doc(docID()).delete();reset();render();feedback(L('deleted'));}
+      catch(err){console.error('Review deletion failed',err);feedback(err.message||L('failed'),true);}
+      finally{busy=false;}
     }
   });
-  setStatus(t('load'));
-  auth.onAuthStateChanged(user => { currentAuth = user; if (ready) render(); });
-  reviewsRef.where('siteID','==',String(sid)).onSnapshot(snapshot => {
-    reviews = snapshot.docs.map(doc => ({id:doc.id, ...doc.data()}));
-    reviews.sort((a,b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0) || b.id.localeCompare(a.id));
-    ready = true;
-    setStatus(''); render();
-  }, error => { ready = true; setStatus(t('error') + ' ' + error.message,true); render(); });
+  auth.onAuthStateChanged(next=>{user=next;if(!user)reset();render();});
+  feedback(L('loading'));
+  collection.where('siteID','==',siteID).onSnapshot(s=>{
+    reviews=s.docs.map(d=>({id:d.id,...d.data()}));
+    reviews.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)||b.id.localeCompare(a.id));
+    ready=true;feedback('');render();
+  },error=>{console.error('Review loading failed',error);ready=true;feedback(L('loadError')+' '+error.message,true);render();});
   document.addEventListener('hayyak:lang',render);
-  window.HayyakReviews = {render};
 })();
