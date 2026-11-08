@@ -1371,3 +1371,18 @@ html[lang="en"] .kicker{letter-spacing:.14em;text-transform:uppercase;font-size:
 .sd-review-status{margin:.25rem 0 1rem;padding:.85rem 1rem;border:1px solid var(--line);border-radius:12px;color:var(--muted);background:#f7f6fb;font-size:.9rem}
 .sd-review-status[hidden]{display:none}
 .sd-review-status.is-error{border-color:#e7b5b5;color:#953939;background:#fff8f8}
+
+/* Firebase review cards are created after the initial scroll observer.
+   Keep these cards visible regardless of the page-wide reveal animation. */
+.sd-reviews #sd-review-list.sd-reviews-loaded {
+  display: grid;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.sd-reviews #sd-review-list.sd-reviews-loaded > .sd-review {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  animation: none !important;
+}

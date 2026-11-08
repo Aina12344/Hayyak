@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@200;300;400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="images/favicon.png">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=reviewcards2">
 </head>
 
 <body class="over-hero">
@@ -105,7 +105,7 @@
           <a id="sd-review-login" class="sd-review-primary sd-review-login" href="login.html" data-i18n="sd_login_review" hidden></a>
         </div>
 
-        <ul class="sd-review-list" id="sd-review-list"></ul>
+        <ul class="sd-review-list" id="sd-review-list" aria-live="polite" aria-label="Visitor reviews"></ul>
       </section>
 
       <!-- 4. More places nearby -->
@@ -130,6 +130,6 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script defer src="js/firebase-init.js"></script>
-  <script defer src="js/reviews-firebase.js"></script>
+  <script defer src="js/reviews-firebase.js?v=reviewcards2"></script>
 </body>
 </html>
