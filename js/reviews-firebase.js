@@ -3,6 +3,7 @@
   "use strict";
   const $ = id => document.getElementById(id);
   if (!$('sd-review-form') || !window.HayyakFirebase) return;
+  window.HayyakReviewLoaded = true;
   const { auth, db } = window.HayyakFirebase;
   const params = new URLSearchParams(window.location.search);
   const siteID = (params.get('id') || params.get('siteID') || '').trim();
@@ -18,7 +19,7 @@
       updated:'Your review was updated.', deleted:'Your review was deleted.',
       confirm:'Delete your review? This cannot be undone.', working:'Saving…',
       failed:'Unable to save the review. Please check the connection and Firebase rules.',
-      loading:'Loading reviews…', loadError:'Could not load reviews. Please check the Firebase settings.'
+      loading:'Loading reviews…', loadError:'Unable to load reviews. Check the connection or Firestore permissions and refresh.'
     },
     ar: {
       eyebrow:'شارك تجربتك', title:'أضف تقييمك', signin:'سجّل الدخول لإضافة تقييم. يمكنك قراءة تقييمات الزوار بدون تسجيل.',
@@ -29,13 +30,14 @@
       updated:'تم تحديث تقييمك.', deleted:'تم حذف تقييمك.',
       confirm:'هل تريد حذف تقييمك؟ لا يمكن التراجع عن الحذف.', working:'جارٍ الحفظ…',
       failed:'تعذّر حفظ التقييم. تحقق من الاتصال وقواعد Firebase.',
-      loading:'جارٍ تحميل التقييمات…', loadError:'تعذّر تحميل التقييمات. تحقق من إعدادات Firebase.'
+      loading:'جارٍ تحميل التقييمات…', loadError:'تعذّر تحميل التقييمات. تحقق من الاتصال أو صلاحيات Firebase ثم حدّث الصفحة.'
     }
   };
   const L = key => locale[Hayyak.getLang() === 'en' ? 'en' : 'ar'][key];
   const escapeHTML = Hayyak.esc;
   const form = $('sd-review-form');
-  let user = null, reviews = [], editing = false, ready = false, busy = false;
+  let user = null, reviews = [], editing = false, ready = false, busy = false, loadError = '';
+  const status = $('sd-review-status');
   const own = () => reviews.find(r => user && r.userID === user.uid);
   const docID = () => siteID + '_' + user.uid;
   const starString = n => '★★★★★'.slice(0, Math.round(n)) + '☆☆☆☆☆'.slice(0, 5 - Math.round(n));
@@ -66,7 +68,12 @@
     $('sd-review-login').hidden=!!user;
     form.hidden=!user || (!!mine&&!editing);
     const list=$('sd-review-list');
-    $('sd-no-reviews').hidden=!ready || reviews.length>0;
+    if (status) {
+      status.hidden = ready && !loadError;
+      status.textContent = loadError || L('loading');
+      status.classList.toggle('is-error', !!loadError);
+    }
+    $('sd-no-reviews').hidden=!ready || !!loadError || reviews.length>0;
     const valid=reviews.map(r=>Number(r.rating)).filter(n=>Number.isInteger(n)&&n>=1&&n<=5);
     $('sd-score').hidden=!valid.length;
     if(valid.length){
@@ -127,11 +134,11 @@
     }
   });
   auth.onAuthStateChanged(next=>{user=next;if(!user)reset();render();});
-  feedback(L('loading'));
+  render();
   collection.where('siteID','==',siteID).onSnapshot(s=>{
     reviews=s.docs.map(d=>({id:d.id,...d.data()}));
     reviews.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)||b.id.localeCompare(a.id));
-    ready=true;feedback('');render();
-  },error=>{console.error('Review loading failed',error);ready=true;feedback(L('loadError')+' '+error.message,true);render();});
-  document.addEventListener('hayyak:lang',render);
+    ready=true;loadError='';render();
+  },error=>{console.error('Review loading failed',error);ready=true;loadError=L('loadError')+' ('+error.code+')';render();});
+  document.addEventListener('hayyak:lang',()=>{ if(loadError) loadError=L('loadError'); render(); });
 })();

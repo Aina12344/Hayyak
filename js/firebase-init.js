@@ -9,7 +9,11 @@
     messagingSenderId: "915478548833",
     appId: "1:915478548833:web:0c04f0d9b68b0c04397520"
   };
-  firebase.initializeApp(config);
+  if (typeof firebase === "undefined") {
+    document.dispatchEvent(new CustomEvent("hayyak:firebase-error", { detail: "Firebase scripts could not be loaded." }));
+    return;
+  }
+  if (!firebase.apps.length) firebase.initializeApp(config);
   const auth = firebase.auth();
   const db = firebase.firestore();
   window.HayyakFirebase = { auth, db };

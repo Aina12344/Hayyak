@@ -180,7 +180,10 @@
   }
 
   function renderReviews() {
-    if (window.HayyakReviews) window.HayyakReviews.render();
+    const status = $("sd-review-status");
+    if (status && !window.HayyakReviewLoaded) {
+      status.textContent = lang() === "ar" ? "جارٍ تحميل التقييمات…" : "Loading reviews…";
+    }
   }
 
   /* other sites in the same city (or same classification if the city has no others) */
@@ -266,4 +269,20 @@
     requestAnimationFrame(function () { document.body.classList.add("sd-ready"); });
   }
   document.addEventListener("hayyak:lang", render);
+  // The page should never stay silently empty if a Firebase SDK resource is blocked.
+  if (site) {
+    let sdkFailed = false;
+    function showSdkFailure() {
+      if (window.HayyakReviewLoaded || sdkFailed) return;
+      sdkFailed = true;
+      const status = $("sd-review-status");
+      if (!status) return;
+      status.textContent = lang() === "ar"
+        ? "تعذّر الاتصال بخدمة التقييمات. تحقق من الإنترنت ثم حدّث الصفحة."
+        : "Reviews could not connect. Check your connection and refresh the page.";
+      status.classList.add("is-error");
+    }
+    document.addEventListener("hayyak:firebase-error", showSdkFailure);
+    setTimeout(showSdkFailure, 12000);
+  }
 })();

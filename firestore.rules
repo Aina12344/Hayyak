@@ -7,7 +7,9 @@ service cloud.firestore {
         && reviewId == request.resource.data.siteID + "_" + request.auth.uid
         && request.resource.data.keys().hasOnly(["siteID", "userID", "reviewer", "rating", "text", "createdAt", "updatedAt"])
         && request.resource.data.userID == request.auth.uid
-        && request.resource.data.reviewer == request.auth.token.name
+        && request.resource.data.reviewer is string
+        && request.resource.data.reviewer.size() > 0
+        && request.resource.data.reviewer.size() <= 100
         && request.resource.data.siteID is string
         && request.resource.data.siteID.size() > 0
         && request.resource.data.rating is int
