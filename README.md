@@ -68,6 +68,7 @@ Hayyak/
 ├── index.html            Home page
 ├── sites.html            Heritage sites list
 ├── site-details.html     Site details, ratings and reviews
+├── upcoming.html         My Upcoming Visits (add/view/remove)
 ├── login.html            Log in
 ├── register.html         Register
 ├── admin.html            Admin Dashboard
@@ -90,3 +91,7 @@ Hayyak/
 ## Team
 
 See the [AUTHORS](AUTHORS) file.
+
+### My Upcoming Visits implementation
+
+Tourists can save a site using the button on its details page, view saved sites on `upcoming.html`, and remove them there or from the details page. The feature uses browser localStorage keyed by the signed-in tourist UID (or email), matching the existing browser-storage approach. Saved visits remain on the same browser but **do not sync between devices**. Login is required to add/view/remove.
