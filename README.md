@@ -37,7 +37,10 @@ Developed for **IT320 – Practical Software Engineering**, King Saud University
 - **Cache Storage**, supported by `sw.js`, for photos added by the admin.
 - **GitHub Pages** for website hosting.
 
-> Hayyak uses Firebase for tourist authentication and shared reviews. Some other features still rely on browser-based storage.
+
+### My Upcoming Visits implementation
+
+Tourists can save a site using the button on its details page, view saved sites on `upcoming.html`, and remove them there or from the details page. The feature uses browser localStorage keyed by the signed-in tourist UID (or email), matching the existing browser-storage approach. Saved visits remain on the same browser but **do not sync between devices**. Login is required to add/view/remove.
 
 ---
 
@@ -91,7 +94,3 @@ Hayyak/
 ## Team
 
 See the [AUTHORS](AUTHORS) file.
-
-### My Upcoming Visits implementation
-
-Tourists can save a site using the button on its details page, view saved sites on `upcoming.html`, and remove them there or from the details page. The feature uses browser localStorage keyed by the signed-in tourist UID (or email), matching the existing browser-storage approach. Saved visits remain on the same browser but **do not sync between devices**. Login is required to add/view/remove.
